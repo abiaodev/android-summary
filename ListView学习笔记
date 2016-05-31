@@ -1,0 +1,50 @@
+ListView的使用技巧
+遇到的问题：
+        在使用ListView显示多个信息的时候，遇到不知名错误。
+        误以为在ListView的ArrayListAdapter中不能添加三种以上的信息源。
+        最后发现原来在添加int类型的时候错误的添加。以下的添加方法是不正确的
+        假设有如下类
+        public class Book {
+        	private int bookId;
+        	private int imageId;
+        	private String bookName;
+        	private String author;
+        	public void setBookId(int bookId) {
+        		this.bookId = bookId;
+        	}
+        	public void setImageId(int imageId) {
+        		this.imageId = imageId;
+        	}
+        	public void setBookName(String bookName) {
+        		this.bookName = bookName;
+        	}
+        	public void setAuthor(String author) {
+        		this.author = author;
+        	}
+
+        	public int getBookId() {
+        		return bookId;
+        	}
+        	public int getImageId() {
+        		return imageId;
+        	}
+        	public String getBookName() {
+        		return bookName;
+        	}
+        	public String getAuthor() {
+        		return author;
+        	}
+        }
+        添加方法：错误
+        private int data=1;
+        Book book1 = new Book();
+    		book1.setAuthor("biao");
+    		book1.setBookId(1|data);
+    		book1.setBookName("达芬奇密码");
+    		book1.setImageId(R.drawable.ic_launcher);
+        正确：
+        Book book1 = new Book();
+    		book1.setAuthor("biao");
+    		book1.setBookId(R.string.bookId);
+    		book1.setBookName("达芬奇密码");
+    		book1.setImageId(R.drawable.ic_launcher);
