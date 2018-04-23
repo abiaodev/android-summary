@@ -1,30 +1,44 @@
-# Android
-学习Android的一些不错教程和资源总结，当然这只是我个人的一些推荐和总结。
+# Android UI
+学些Android，用户界面是一个很基础但很重要的专业技能，很多时候我们花费时间最多的就是用户界面，说到用户界面就不得不对Android提供常见的组件非常的熟练，以下是常见的Android组件。
 
-## 入门前
-Android原生的开发离不开JavaSE的支持，虽然最近从Android studio3.0之后可以支持Kotlin语言，就世面上来说Java还是会主导一段时间。
-下面给出的是一些比较优秀的Android入门语言教程。
-### 1、Java语言
-* 《Java编程思想》
-* 李刚的《疯狂的java讲义》
-### 2、Kotlin语言
-* http://www.runoob.com/kotlin/kotlin-tutorial.html
-* https://www.kotlincn.net/docs/reference/
-* http://kotlinlang.org/docs/reference/
+## Android原生组件
+Android原生组件主要包含原生库和支持库。
+### 1、基础库
+#### 1.1、AnalogClock(已废弃)
+#### 1.2、ImageView
+#### 1.2.1、ImageButton
+#### 1.2.1.1、ZoomButton(已废弃)
+#### 1.2.2、QuickContactBadge
+#### 1.3、KeyBoardView
+#### 1.4、MediaRouteButton
+#### 1.5、ProgressBar
+#### 1.5.1、AbsSeekBar
+#### 1.5.1.1、SeekBar
+#### 1.5.1.2、RatingBar
+#### 1.6、Space
+#### 1.7、SurfaceView
+#### 1.7.1、GLSurfaceView
+#### 1.7.2、VideoView
+#### 1.8、TextView(详解另寻)
+#### 1.9、TextureView
+#### 1.10、ViewGroup(详解另寻)
+#### 1.11、ViewStub
+### 2、支持库
 
 
-## 入门
+
+## Android布局
 Android的入门主要是在UI和了解Android系统只是这一块，这一块的知识点很系统，只要花时间很快就能全面(不深入)的理解Android开发。
 最好把Android开发者官网的API全都看一遍（不求全记住，但求有印象）。
 
 ### 学习Android最重要的网站：
-* https://developer.android.com/
-* https://developers.google.cn/
+* [谷歌官方网站](https://developer.android.com)
+* [谷歌官方网站中文](https://developers.google.cn)
 ### 学习Android的书籍
 * 《疯狂的Android讲义》作者：李刚------作为参考书可以随时翻阅。
 * 《Android编程权威指南》作者：Big  Nerd Ranch-------涉及到好几个项目(其中有一个不小)，一边学习一边实战。更快的提升
 * 《第一行代码》作者：郭霖------相较于《疯狂Android》薄了很多，但是很全面，再配合其博客相信入门不是梦。
-## 进阶
+## Android自定义组件
 Android进阶包含两块，一是对基础语言的深入理解，二是对Android系统和UI的深入理解。
 ### 1、语言基础
 * 《Effective Java》
