@@ -19,7 +19,7 @@ Android的入门主要是在UI和了解Android系统只是这一块，这一块�
 
 ### 学习Android最重要的网站：
 * [谷歌官方网站](https://developer.android.com)
-* [谷歌官方网站中文](https://developers.google.cn)
+* [谷歌官方网站中文](https://developer.android.google.cn/)
 ### 学习Android的书籍
 * 《疯狂的Android讲义》作者：李刚------作为参考书可以随时翻阅。
 * 《Android编程权威指南》作者：Big  Nerd Ranch-------涉及到好几个项目(其中有一个不小)，一边学习一边实战。更快的提升
