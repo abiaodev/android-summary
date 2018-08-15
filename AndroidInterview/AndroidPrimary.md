@@ -91,21 +91,21 @@
   *   resumeTimers() 恢复所有WebView的所有布局，解析和JavaScript计时器，将恢复调度所有计时器。
 
 ### [WebView与js交互](https://blog.csdn.net/carson_ho/article/details/64904691/)
-* 对于Android调用JS代码的方法有2种
-    1. 通过WebView的loadUrl（） 例如
+1. 对于Android调用JS代码的方法有2种
+  1. 通过WebView的loadUrl（） 例如
 >mWebView.loadUrl("javascript:callJS()");  
 
-    2. 通过WebView的evaluateJavascript（）  
+  2. 通过WebView的evaluateJavascript（）  
 >mWebView.evaluateJavascript（"javascript:callJS()", new ValueCallback<String>() {
       @Override
       public void onReceiveValue(String value) {  
       >//此处为 js 返回的结果  
       }
       });
-* 对于JS调用Android代码的方法有3种
+2. 对于JS调用Android代码的方法有3种
     1. 通过WebView的addJavascriptInterface（）进行对象映射  
 
-      a、定义一个与JS对象映射关系的Android类  
+      1. 定义一个与JS对象映射关系的Android类  
 >public class AndroidtoJs extends Object {  
         // 定义JS需要调用的方法  
         // 被JS调用的方法必须加入@JavascriptInterface注解
@@ -115,13 +115,13 @@
         }  
         }
 
-      b、在html文件中定义一个调用Android功能的方法
+      2. 在html文件中定义一个调用Android功能的方法
 >function callAndroid(){  
         // 由于对象映射，所以调用test对象等于调用Android映射的对象  
         >test.hello("js调用了android中的hello方法");  
         }
 
-      c、在Android里通过WebView设置Android类与JS代码的映射
+      3. 在Android里通过WebView设置Android类与JS代码的映射
 >// 设置与Js交互的权限
         webSettings.setJavaScriptEnabled(true);
         // 通过addJavascriptInterface()将Java对象映射到JS对象  
@@ -131,7 +131,7 @@
 
     2. 通过 WebViewClient 的shouldOverrideUrlLoading ()方法回调拦截 url  
 
-      a、在JS约定所需要的Url协议
+      1. 在JS约定所需要的Url协议
 >function callAndroid(){  
 >/约定的url协议为：js://webview?arg1=111&arg2=222*/
         >document.location = "js://webview?arg1=111&arg2=222";  
@@ -139,7 +139,7 @@
 >//点击按钮则调用callAndroid（）方法   
         onclick="callAndroid()
 
-      b、在Android通过WebViewClient复写shouldOverrideUrlLoading()
+      2. 在Android通过WebViewClient复写shouldOverrideUrlLoading()
 >// 设置与Js交互的权限  
         webSettings.setJavaScriptEnabled(true);  
         mWebView.setWebViewClient(new WebViewClient() {  
@@ -150,7 +150,7 @@
         Uri uri = Uir.parse(url)  
         }
     3. 通过 WebChromeClient的onJsAlert()、onJsConfirm()、onJsPrompt（）方法回调拦截JS对话框alert()、confirm()、prompt（） 消息    
-      a、在JS约定所需要的Url协议
+      1. 在JS约定所需要的Url协议
 >function callAndroid(){  
 >/*约定的url协议为：js://webview?arg1=111&arg2=222*/
         >document.location = "js://webview?arg1=111&arg2=222";  
@@ -158,7 +158,7 @@
 >//点击按钮则调用callAndroid（）方法   
         onclick="callAndroid()
 
-      b、 WebChromeClient复写onJsPrompt（）  
+      2.  WebChromeClient复写onJsPrompt（）  
 >//设置与Js交互的权限  
         webSettings.setJavaScriptEnabled(true);
         mWebView.setWebChromeClient(new WebChromeClient() {  
@@ -244,7 +244,7 @@
     2. 活在activity生命周期之外的线程。
 
   Android中最容易导致内存泄漏的是Context，还有以下情况：
-  
+
     1. Static Activities
     2. Static View
     3. Inner Class且有静态变量的引用
