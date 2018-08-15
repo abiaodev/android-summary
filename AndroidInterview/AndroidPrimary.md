@@ -1,25 +1,27 @@
 # Android基础面试题
 ## 1 Android系统的架构
 ### 1.1 应用层(System App)  
-    系统内置应用与非内置应用，Java开发直接与用户交互。
+系统内置应用与非内置应用，Java开发直接与用户交互。
 ### 1.2 应用框架层(Java API Framework)  
-    为开发人员提供开发API，主要包含以下组件  
-      1. ActivityManager  
-      2. LocationManager  
-      3. PackageManager  
-      4. NotificationManager  
-      5. ResourceManager  
-      6. TelephonyManager  
-      7. WindowManager  
-      8. ContentManager  
-      9. ViewSystem  
+为开发人员提供开发API，主要包含以下组件  
+1. ActivityManager  
+2. LocationManager  
+3. PackageManager  
+4. NotificationManager  
+5. ResourceManager  
+6. TelephonyManager  
+7. WindowManager  
+8. ContentManager  
+9. ViewSystem  
+
 ### 1.3 系统运行库层(Native)  
-    c/c++开发主要分为连个部分
-      1. c/c++程序库
-      2. Android运行时库
+c/c++开发主要分为连个部分
+1. c/c++程序库
+2. Android运行时库
+
 ### 1.4 硬件抽象层(HAL)
 ### 1.5 Linux内核
-
+***
 ## 2  Android中四大组件
 1. Activity  
       Activity 表示具有用户界面的单一屏幕。例如，电子邮件应用可能具有一个显示新电子邮件列表的 Activity、一个用于撰写电子邮件的 Activity 以及一个用于阅读电子邮件的 Activity。 尽管这些 Activity 通过协作在电子邮件应用中形成了一种紧密结合的用户体验，但每一个 Activity 都独立于其他 Activity 而存在。因此，其他应用可以启动其中任何一个 Activity（如果电子邮件应用允许）。例如，相机应用可以启动电子邮件应用内用于撰写新电子邮件的 Activity，以便用户共享图片。
@@ -74,7 +76,7 @@
 在代码中通过调用Context的registerReceiver（）方法进行动态注册BroadcastReceiver,动态广播最好在Activity的onResume()注册、onPause()注销。
 
 
-
+***
 ## 3 UI相关(使用)
 ### 3.1 Android中常用布局
 #### 3.1.1 LinearLayout
@@ -204,11 +206,11 @@
 [3. Layout Animation](https://blog.csdn.net/guolin_blog/article/details/43536355)  
 [4. Property Animation](https://blog.csdn.net/guolin_blog/article/details/43536355)
 
-
+***
 ## 4 UI原理
 ### 4.1 View，ViewGroup事件分发
 
-
+***
 ## 5 Android屏幕适配
 ### 5.1 dp直接适配
   * dp是什么，sp呢，有什么区别
@@ -219,7 +221,7 @@
 ### 5.3 smallestWidth适配(sw限定符适配)
 ### 5.4 [UI适配框架](https://github.com/hongyangAndroid/AndroidAutoLayout)（已经停止维护）
 ### 5.5 [今日头条适配方案](https://zhuanlan.zhihu.com/p/37199709?utm_source=weibo&utm_medium=social&utm_oi=27871238160384)
-
+***
 ## 6 性能优化相关
 ### 6.1 Android屏幕渲染机制
 ### 6.2 界面卡顿的原因以及解决方法
@@ -229,7 +231,7 @@
   >>3. UI线程处理过多任务(将复杂任务放入子线程中处理)
   >>4. 频繁的GC(代码优化)
 
-
+***
 ## 7 持久化技术相关    
 
 ### 7.1 Share Preference
@@ -238,7 +240,7 @@
 ### 7.4 File
 ### 7.5 网络存储
 
-
+***
 ## 8 Crash相关
 ### 8.1 Android中的ANR
 ### 8.2 [内存泄漏如何排查，MAT分析方法以及原理，各种泄漏的原因是什么比如](https://www.jianshu.com/p/ac00e370f83d)
@@ -257,7 +259,7 @@
 8. Sensor Manager
 
 
-
+***
 ## 9 网络、进程与线程
 ### 9.1 AsyncTask
 ### 9.2 [HttpClient与HttpUrlConnection的区别
@@ -276,7 +278,9 @@ Android的消息机制一般指的是Handler的运行机制。Handler的运行�
 ### Android 线程池的实现原理
 ### 讲解一下Context
 ### Java虚拟机和Dalvik虚拟机的区别
-
+***
 ## 10 设计模式
+***
 ## 11 开源框架
+***
 ## 12 软件架构
