@@ -104,8 +104,9 @@
       });
 * 对于JS调用Android代码的方法有3种
     1. 通过WebView的addJavascriptInterface（）进行对象映射  
+
       a、定义一个与JS对象映射关系的Android类  
-        >public class AndroidtoJs extends Object {  
+>public class AndroidtoJs extends Object {  
         // 定义JS需要调用的方法  
         // 被JS调用的方法必须加入@JavascriptInterface注解
         @JavascriptInterface  
@@ -115,13 +116,13 @@
         }
 
       b、在html文件中定义一个调用Android功能的方法
-        >function callAndroid(){  
+>function callAndroid(){  
         // 由于对象映射，所以调用test对象等于调用Android映射的对象  
         >test.hello("js调用了android中的hello方法");  
         }
 
       c、在Android里通过WebView设置Android类与JS代码的映射
-        >// 设置与Js交互的权限
+>// 设置与Js交互的权限
         webSettings.setJavaScriptEnabled(true);
         // 通过addJavascriptInterface()将Java对象映射到JS对象  
         //参数1：Javascript对象名  
@@ -129,16 +130,17 @@
         mWebView.addJavascriptInterface(new AndroidtoJs(), "test");//AndroidtoJS类对象映射到js的test对象
 
     2. 通过 WebViewClient 的shouldOverrideUrlLoading ()方法回调拦截 url  
+
       a、在JS约定所需要的Url协议
-        >function callAndroid(){  
-        >/*约定的url协议为：js://webview?arg1=111&arg2=222*/
+>function callAndroid(){  
+>/约定的url协议为：js://webview?arg1=111&arg2=222*/
         >document.location = "js://webview?arg1=111&arg2=222";  
         }  
-        >//点击按钮则调用callAndroid（）方法   
+>//点击按钮则调用callAndroid（）方法   
         onclick="callAndroid()
 
       b、在Android通过WebViewClient复写shouldOverrideUrlLoading()
-        >// 设置与Js交互的权限  
+>// 设置与Js交互的权限  
         webSettings.setJavaScriptEnabled(true);  
         mWebView.setWebViewClient(new WebViewClient() {  
         @Override  
@@ -149,15 +151,15 @@
         }
     3. 通过 WebChromeClient的onJsAlert()、onJsConfirm()、onJsPrompt（）方法回调拦截JS对话框alert()、confirm()、prompt（） 消息    
       a、在JS约定所需要的Url协议
-        >function callAndroid(){  
-        >/*约定的url协议为：js://webview?arg1=111&arg2=222*/
+>function callAndroid(){  
+>/*约定的url协议为：js://webview?arg1=111&arg2=222*/
         >document.location = "js://webview?arg1=111&arg2=222";  
         }  
-        >//点击按钮则调用callAndroid（）方法   
+>//点击按钮则调用callAndroid（）方法   
         onclick="callAndroid()
 
       b、 WebChromeClient复写onJsPrompt（）  
-        >//设置与Js交互的权限  
+>//设置与Js交互的权限  
         webSettings.setJavaScriptEnabled(true);
         mWebView.setWebChromeClient(new WebChromeClient() {  
         // 拦截输入框(原理同方式2)  
@@ -218,7 +220,7 @@
 ## 性能优化相关
 ### Android屏幕渲染机制
 ### 界面卡顿的原因以及解决方法
-  >一般人眼感觉卡顿的零界点是60FPS,所以为了让人眼感受不到卡顿，Android系统会每隔16ms发出VSYNC信号重新绘制界面。如果由于各种原因导致界面的刷新频率在16ms之后会出现掉帧的现象，这样会降低界面刷新的频率，导致用户感知到卡顿。主要原因有以下：
+>一般人眼感觉卡顿的零界点是60FPS,所以为了让人眼感受不到卡顿，Android系统会每隔16ms发出VSYNC信号重新绘制界面。如果由于各种原因导致界面的刷新频率在16ms之后会出现掉帧的现象，这样会降低界面刷新的频率，导致用户感知到卡顿。主要原因有以下：
   1. 过于复杂的界面(使用页面复用include、ViewStub、merge等技术简化布局)
   2. 过度绘制(同上)
   3. UI线程处理过多任务(将复杂任务放入子线程中处理)
@@ -237,11 +239,12 @@
 ## Crash相关
 ### Android中的ANR
 ### [内存泄漏如何排查，MAT分析方法以及原理，各种泄漏的原因是什么比如](https://www.jianshu.com/p/ac00e370f83d)
-  >传统的内存泄漏原因是：忘记释放分配的内存。逻辑内存溢出的原因是：当不再需要这个对象，还未释放该对象的所有引用。Android中的内存泄漏一般分为两种  
+>传统的内存泄漏原因是：忘记释放分配的内存。逻辑内存溢出的原因是：当不再需要这个对象，还未释放该对象的所有引用。Android中的内存泄漏一般分为两种  
     1. 全局进程的static变量，他无视应用状态，持有Activity的强引用。  
     2. 活在activity生命周期之外的线程。
 
   Android中最容易导致内存泄漏的是Context，还有以下情况：
+  
     1. Static Activities
     2. Static View
     3. Inner Class且有静态变量的引用
