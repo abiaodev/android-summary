@@ -119,18 +119,18 @@
         }    
 
       >2. 在html文件中定义一个调用Android功能的方法
->function callAndroid(){  
-        // 由于对象映射，所以调用test对象等于调用Android映射的对象  
-        >test.hello("js调用了android中的hello方法");  
-        }
+      function callAndroid(){    
+        // 由于对象映射，所以调用test对象等于调用Android映射的对象    
+        test.hello("js调用了android中的hello方法");    
+        }    
 
-      3. 在Android里通过WebView设置Android类与JS代码的映射
->// 设置与Js交互的权限
-        webSettings.setJavaScriptEnabled(true);
-        // 通过addJavascriptInterface()将Java对象映射到JS对象  
-        //参数1：Javascript对象名  
-        //参数2：Java对象名  
-        mWebView.addJavascriptInterface(new AndroidtoJs(), "test");//AndroidtoJS类对象映射到js的test对象
+      >3. 在Android里通过WebView设置Android类与JS代码的映射  
+      // 设置与Js交互的权限    
+        webSettings.setJavaScriptEnabled(true);    
+        // 通过addJavascriptInterface()将Java对象映射到JS对象    
+        //参数1：Javascript对象名    
+        //参数2：Java对象名    
+        mWebView.addJavascriptInterface(new AndroidtoJs(), "test");//AndroidtoJS类对象映射到js的test对象    
 
     2. 通过 WebViewClient 的shouldOverrideUrlLoading ()方法回调拦截 url  
 
