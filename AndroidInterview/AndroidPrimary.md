@@ -19,6 +19,7 @@
       2. Android运行时库
 4. 硬件抽象层(HAL)
 5. Linux内核
+
 ##  Android中四大组件
 1. Activity  
       Activity 表示具有用户界面的单一屏幕。例如，电子邮件应用可能具有一个显示新电子邮件列表的 Activity、一个用于撰写电子邮件的 Activity 以及一个用于阅读电子邮件的 Activity。 尽管这些 Activity 通过协作在电子邮件应用中形成了一种紧密结合的用户体验，但每一个 Activity 都独立于其他 Activity 而存在。因此，其他应用可以启动其中任何一个 Activity（如果电子邮件应用允许）。例如，相机应用可以启动电子邮件应用内用于撰写新电子邮件的 Activity，以便用户共享图片。
@@ -34,6 +35,7 @@
     例如，Android 系统可提供管理用户联系人信息的内容提供程序。 因此，任何具有适当权限的应用都可以查询内容提  
     供程序的某一部分（如 ContactsContract.Data），以读取和写入有关特定人员的信息。
   内容提供程序也适用于读取和写入您的应用不共享的私有数据。 例如，记事本示例应用使用内容提供程序来保存笔记。
+
 ### Activity的[生命周期](https://blog.csdn.net/android_tutor/article/details/5772285)以及[启动过程](http://gityuan.com/2016/03/12/start-activity/)
 ### Activity的四种启动模式及其应用场景
 #### 任务栈
@@ -47,6 +49,7 @@
      如果发现有对应的Activity实例，则使此Activity实例之上的其他Activity实例统统出栈，使此Activity实例成为栈顶对象，显示到幕前。
 * SINGLEINSTANCE
     启用一个新的栈结构，将Activity放置于这个新的栈结构中，并保证不再有其他Activity实例进入。
+
 ### 保存Activity状态
 
 ### [Fragment的生命周期](https://blog.csdn.net/lmj623565791/article/details/37970961)
@@ -57,6 +60,7 @@
 * 使用这种方法启动一个Service，在Service启动后该Service和启动该Service的Activity就没有关系了。所以这种发放启动的Service不能和Activity进行交互。
 * 通常情况下使用startService调用的Service生命周期方法为：onCreate()->onStartCommand()。其中多次调用startService只调用一次onCreate(), 但可以多次调用onStartCommand()。
 * 当服务需要退出时，调用stopService，就会调用Service的onDestroy()方法。
+
 #### 使用bindService启动服务的生命周期方法
 * 使用这种方法启动的Service是和调用者Activtiy同生命的，当Activtiy退出时，服务也同时销毁了。这种方法启动的Service能够和Activity进行交互。
 * 调用bindService启动服务，Service生命周期方法为：onCreate()->onBind()多次调用bindService并不会多次调用onBind(),即onCreate()和onBind()都是只被调用一次。
@@ -73,16 +77,113 @@
 
 ## UI相关(使用)
 ### Android中常用布局
-### WebView与js交互（调用哪些API）
-### RecyclerView
-### [ListView详细讲解](https://blog.csdn.net/guolin_blog/article/details/44996879)
-### View、surfaceView、GLSurfaceView
+#### LinearLayout
+#### TableLayout
+#### RelativeLayout
+#### FrameLayout
+#### AbsoluteLayout
+#### GridLayout
+#### CoordinatorLayout
+### [WebView](https://www.jianshu.com/p/fd61e8f4049e)常用方法
+  *   onPause() 尽力尝试暂停可以暂停的任何处理，如动画和地理位置。 不会暂停JavaScript。 要全局暂停JavaScript，可使用pauseTimers。
+  *   onResume() 恢复onPause() 停掉的操作；
+  *   pauseTimers() 暂停所有WebView的布局，解析和JavaScript定时器。 这个是一个全局请求，不仅限于这个WebView。
+  *   resumeTimers() 恢复所有WebView的所有布局，解析和JavaScript计时器，将恢复调度所有计时器。
 
-### 自定义view和动画
-### dp是什么，sp呢，有什么区别
-dp:每英寸的像素点数，比如手机是1080x1920，手机的宽高是3x4英寸的，那么dp就是1080/3和1920/4 。
-sp:除了受屏幕密度影响外,还受到用户的字体大小影响，通常情况下,建议使用sp来跟随用户字体大小设置。
-### 自定义View，ViewGroup注意那些回调？
+### [WebView与js交互](https://blog.csdn.net/carson_ho/article/details/64904691/)
+* 对于Android调用JS代码的方法有2种
+    1. 通过WebView的loadUrl（） 例如：
+      >mWebView.loadUrl("javascript:callJS()");  
+
+    2. 通过WebView的evaluateJavascript（）  
+      >mWebView.evaluateJavascript（"javascript:callJS()", new ValueCallback<String>() {
+      @Override
+      public void onReceiveValue(String value) {  
+      >//此处为 js 返回的结果  
+      }
+      });
+* 对于JS调用Android代码的方法有3种
+    1. 通过WebView的addJavascriptInterface（）进行对象映射  
+      a、定义一个与JS对象映射关系的Android类  
+        >public class AndroidtoJs extends Object {  
+        // 定义JS需要调用的方法  
+        // 被JS调用的方法必须加入@JavascriptInterface注解
+        @JavascriptInterface  
+        public void hello(String msg) {  
+        >System.out.println("JS调用了Android的hello方法");  
+        }  
+        }
+
+      b、在html文件中定义一个调用Android功能的方法
+        >function callAndroid(){  
+        // 由于对象映射，所以调用test对象等于调用Android映射的对象  
+        >test.hello("js调用了android中的hello方法");  
+        }
+
+      c、在Android里通过WebView设置Android类与JS代码的映射
+        >// 设置与Js交互的权限
+        webSettings.setJavaScriptEnabled(true);
+        // 通过addJavascriptInterface()将Java对象映射到JS对象  
+        //参数1：Javascript对象名  
+        //参数2：Java对象名  
+        mWebView.addJavascriptInterface(new AndroidtoJs(), "test");//AndroidtoJS类对象映射到js的test对象
+
+    2. 通过 WebViewClient 的shouldOverrideUrlLoading ()方法回调拦截 url  
+      a、在JS约定所需要的Url协议
+        >function callAndroid(){  
+        >/*约定的url协议为：js://webview?arg1=111&arg2=222*/
+        >document.location = "js://webview?arg1=111&arg2=222";  
+        }  
+        >//点击按钮则调用callAndroid（）方法   
+        onclick="callAndroid()
+
+      b、在Android通过WebViewClient复写shouldOverrideUrlLoading()
+        >// 设置与Js交互的权限  
+        webSettings.setJavaScriptEnabled(true);  
+        mWebView.setWebViewClient(new WebViewClient() {  
+        @Override  
+        public boolean shouldOverrideUrlLoading(WebView view, String url) {  
+        // 如果url的协议 = 预先约定的 js 协议  
+        // 就解析往下解析参数  
+        Uri uri = Uir.parse(url)  
+        }
+    3. 通过 WebChromeClient的onJsAlert()、onJsConfirm()、onJsPrompt（）方法回调拦截JS对话框alert()、confirm()、prompt（） 消息    
+      a、在JS约定所需要的Url协议
+        >function callAndroid(){  
+        >/*约定的url协议为：js://webview?arg1=111&arg2=222*/
+        >document.location = "js://webview?arg1=111&arg2=222";  
+        }  
+        >//点击按钮则调用callAndroid（）方法   
+        onclick="callAndroid()
+
+      b、 WebChromeClient复写onJsPrompt（）  
+        >//设置与Js交互的权限  
+        webSettings.setJavaScriptEnabled(true);
+        mWebView.setWebChromeClient(new WebChromeClient() {  
+        // 拦截输入框(原理同方式2)  
+        @Override  
+        public boolean onJsPrompt(WebView view, String url, String message, String defaultValue, JsPromptResult result) {  
+        // 如果url的协议 = 预先约定的 js 协议  
+        // 就解析往下解析参数  
+        Uri uri = Uir.parse(message)  
+        }  
+      // 拦截JS的警告框  
+      @Override  
+      public boolean onJsAlert(WebView view, String url, String message, JsResult result) {  
+      return super.onJsAlert(view, url, message, result);
+      }  
+      // 拦截JS的确认框  
+      @Override                      public boolean onJsConfirm(WebView view, String url, String message, JsResult result) {  
+      return super.onJsConfirm(view, url, message, result);  
+      }
+
+### [RecyclerView](https://blog.csdn.net/lmj623565791/article/details/45059587)
+### [ListView详细讲解](https://blog.csdn.net/guolin_blog/article/details/44996879)
+### ImageView
+### SurfaceView
+### GLSurfaceView
+### 自定义view
+### 自定义View、ViewGroup注意那些回调？
 1. void onFinishInflate();  
     当系统解析XML中声明的View后回调此方法，调用顺序：内层View->外层View,如果是viewgroup,适合在这里获取子View。  
     如果View没有在XML中声明而是直接在代码中构造的，则不会回调此方法
@@ -103,42 +204,52 @@ sp:除了受屏幕密度影响外,还受到用户的字体大小影响，通常�
 ### View，ViewGroup事件分发
 
 
+## Android屏幕适配
+### dp直接适配
+  1. dp是什么，sp呢，有什么区别
+     dp:每英寸的像素点数，比如手机是1080x1920，手机的宽高是3x4英寸的，那么dp就是1080/3和1920/4 。
+  2. sp:除了受屏幕密度影响外,还受到用户的字体大小影响，通常情况下,建议使用sp来跟随用户字体大小设置。
+
+### 宽高限定符适配
+### smallestWidth适配(sw限定符适配)
+### [UI适配框架](https://github.com/hongyangAndroid/AndroidAutoLayout)（已经停止维护）
+### [今日头条适配方案](https://zhuanlan.zhihu.com/p/37199709?utm_source=weibo&utm_medium=social&utm_oi=27871238160384)
 
 ## 性能优化相关
 ### Android屏幕渲染机制
 ### 界面卡顿的原因以及解决方法
-一般人眼感觉卡顿的零界点是60FPS,所以为了让人眼感受不到卡顿，Android系统会每隔16ms发出VSYNC信号重新绘制界面。如果由于各种原因导致界面的刷新频率在16ms之后会出现掉帧的现象，这样会降低界面刷新的频率，导致用户感知到卡顿。主要原因有以下：
-1. 过于复杂的界面(使用页面复用include、ViewStub、merge等技术简化布局)
-2. 过度绘制(同上)
-3. UI线程处理过多任务(将复杂任务放入子线程中处理)
-4. 频繁的GC(代码优化)
+  >一般人眼感觉卡顿的零界点是60FPS,所以为了让人眼感受不到卡顿，Android系统会每隔16ms发出VSYNC信号重新绘制界面。如果由于各种原因导致界面的刷新频率在16ms之后会出现掉帧的现象，这样会降低界面刷新的频率，导致用户感知到卡顿。主要原因有以下：
+  1. 过于复杂的界面(使用页面复用include、ViewStub、merge等技术简化布局)
+  2. 过度绘制(同上)
+  3. UI线程处理过多任务(将复杂任务放入子线程中处理)
+  4. 频繁的GC(代码优化)
 
 
 ## 持久化技术相关    
-### Android的数据存储
-1. Share Preference
-2. SQLite
-3. ContentProvider
-4. File
-5. 网络存储
+
+### Share Preference
+### SQLite
+### ContentProvider
+### File
+### 网络存储
 
 
 ## Crash相关
 ### Android中的ANR
 ### [内存泄漏如何排查，MAT分析方法以及原理，各种泄漏的原因是什么比如](https://www.jianshu.com/p/ac00e370f83d)
-传统的内存泄漏原因是：忘记释放分配的内存。逻辑内存溢出的原因是：当不再需要这个对象，还未释放该对象的所有引用。  
-    Android中的内存泄漏一般分为两种  
-    第一：全局进程的static变量，他无视应用状态，持有Activity的强引用。  
-    第二：活在activity生命周期之外的线程。
-    Android中最容易导致内存泄漏的是Context，还有以下情况：
-1. Static Activities
-2. Static View
-3. Inner Class且有静态变量的引用
-4. Anonymous Classes
-5. Handler
-6. Threads
-7. TimerTask
-8. Sensor Manager
+  >传统的内存泄漏原因是：忘记释放分配的内存。逻辑内存溢出的原因是：当不再需要这个对象，还未释放该对象的所有引用。Android中的内存泄漏一般分为两种  
+    1. 全局进程的static变量，他无视应用状态，持有Activity的强引用。  
+    2. 活在activity生命周期之外的线程。
+
+  Android中最容易导致内存泄漏的是Context，还有以下情况：
+    1. Static Activities
+    2. Static View
+    3. Inner Class且有静态变量的引用
+    4. Anonymous Classes
+    5. Handler
+    6. Threads
+    7. TimerTask
+    8. Sensor Manager
 
 
 
@@ -151,17 +262,15 @@ sp:除了受屏幕密度影响外,还受到用户的字体大小影响，通常�
 ### 进程间通信的方式(IPC)
 ### 加载大图(ImageLoader)
 ### Android消息机制
-Android的消息机制一般指的是Handler的运行机制。Handler的运行机制离不开MessageQueue/Message/Looper/Handler这四个类。
-    Message：消息产生分为硬件生成和软件生成。
-    MessageQueue：主要功能是向消息池投递消息(MessageQueue.enqueueMessage)和取走消息(MessageQueue.next)。
-    Handler：消息辅助类，主要功能向消息池发送各种消息事件(Handler.sendMessage)和处理相应消息事件(Handler.handleMessage)。
-    Looper：不断循环执行(Looper.loop)，按分发机制将消息分发给目标处理者。
-### Android 线程池的实现原理
+  Android的消息机制一般指的是Handler的运行机制。Handler的运行机制离不开MessageQueue/Message/Looper/Handler这四个类。  
+  1. Message：消息产生分为硬件生成和软件生成。  
+  2. MessageQueue：主要功能是向消息池投递消息(MessageQueue.enqueueMessage)和取走消息(MessageQueue.next)。  
+  3. Handler：消息辅助类，主要功能向消息池发送各种消息事件(Handler.sendMessage)和处理相应消息事件(Handler.handleMessage)。  
+  4. Looper：不断循环执行(Looper.loop)，按分发机制将消息分发给目标处理者。
 
+### Android 线程池的实现原理
 ### 讲解一下Context
 ### Java虚拟机和Dalvik虚拟机的区别
-
-
 
 ## 设计模式
 ## 开源框架
