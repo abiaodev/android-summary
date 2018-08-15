@@ -155,7 +155,7 @@ c/c++开发主要分为连个部分
       Uri uri = Uir.parse(url)    
       }    
 
-3. 通过 WebChromeClient的onJsAlert()、onJsConfirm()、onJsPrompt（）方法回调拦截JS对话框alert()、confirm()、prompt（） 消息  
+  3. 通过 WebChromeClient的onJsAlert()、onJsConfirm()、onJsPrompt（）方法回调拦截JS对话框alert()、confirm()、prompt（） 消息  
 
     >1. 在JS约定所需要的Url协议  
     function callAndroid(){    
