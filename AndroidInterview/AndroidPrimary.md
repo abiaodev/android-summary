@@ -109,7 +109,7 @@
   1. 通过WebView的addJavascriptInterface（）进行对象映射  
 
       >1. 定义一个与JS对象映射关系的Android类  
-      public class AndroidtoJs extends Object {    
+      >>public class AndroidtoJs extends Object {    
         // 定义JS需要调用的方法    
         // 被JS调用的方法必须加入@JavascriptInterface注解    
         @JavascriptInterface    
@@ -119,86 +119,86 @@
         }    
 
       >2. 在html文件中定义一个调用Android功能的方法
-      function callAndroid(){    
+      >>function callAndroid(){    
         // 由于对象映射，所以调用test对象等于调用Android映射的对象    
         test.hello("js调用了android中的hello方法");    
         }    
 
       >3. 在Android里通过WebView设置Android类与JS代码的映射  
-      // 设置与Js交互的权限    
-        webSettings.setJavaScriptEnabled(true);    
-        // 通过addJavascriptInterface()将Java对象映射到JS对象    
-        //参数1：Javascript对象名    
-        //参数2：Java对象名    
-        mWebView.addJavascriptInterface(new AndroidtoJs(), "test");//AndroidtoJS类对象映射到js的test对象    
+      >>// 设置与Js交互的权限    
+      webSettings.setJavaScriptEnabled(true);    
+      // 通过addJavascriptInterface()将Java对象映射到JS对象    
+      //参数1：Javascript对象名    
+      //参数2：Java对象名    
+      mWebView.addJavascriptInterface(new AndroidtoJs(), "test");//AndroidtoJS类对象映射到js的test对象    
 
-    2. 通过 WebViewClient 的shouldOverrideUrlLoading ()方法回调拦截 url  
+  2. 通过 WebViewClient 的shouldOverrideUrlLoading ()方法回调拦截 url  
 
-      1. 在JS约定所需要的Url协议
->function callAndroid(){  
->/约定的url协议为：js://webview?arg1=111&arg2=222*/
-        >document.location = "js://webview?arg1=111&arg2=222";  
-        }  
->//点击按钮则调用callAndroid（）方法   
-        onclick="callAndroid()
-
-      2. 在Android通过WebViewClient复写shouldOverrideUrlLoading()
->// 设置与Js交互的权限  
-        webSettings.setJavaScriptEnabled(true);  
-        mWebView.setWebViewClient(new WebViewClient() {  
-        @Override  
-        public boolean shouldOverrideUrlLoading(WebView view, String url) {  
-        // 如果url的协议 = 预先约定的 js 协议  
-        // 就解析往下解析参数  
-        Uri uri = Uir.parse(url)  
-        }
-    3. 通过 WebChromeClient的onJsAlert()、onJsConfirm()、onJsPrompt（）方法回调拦截JS对话框alert()、confirm()、prompt（） 消息    
-      1. 在JS约定所需要的Url协议
->function callAndroid(){  
->/*约定的url协议为：js://webview?arg1=111&arg2=222*/
-        >document.location = "js://webview?arg1=111&arg2=222";  
-        }  
->//点击按钮则调用callAndroid（）方法   
-        onclick="callAndroid()
-
-      2.  WebChromeClient复写onJsPrompt（）  
->//设置与Js交互的权限  
-        webSettings.setJavaScriptEnabled(true);
-        mWebView.setWebChromeClient(new WebChromeClient() {  
-        // 拦截输入框(原理同方式2)  
-        @Override  
-        public boolean onJsPrompt(WebView view, String url, String message, String defaultValue, JsPromptResult result) {  
-        // 如果url的协议 = 预先约定的 js 协议  
-        // 就解析往下解析参数  
-        Uri uri = Uir.parse(message)  
-        }  
-      // 拦截JS的警告框  
-      @Override  
-      public boolean onJsAlert(WebView view, String url, String message, JsResult result) {  
-      return super.onJsAlert(view, url, message, result);
+      >1. 在JS约定所需要的Url协议
+      >>function callAndroid(){  
+      //约定的url协议为：js://webview?arg1=111&arg2=222  
+      document.location = "js://webview?arg1=111&arg2=222";  
       }  
-      // 拦截JS的确认框  
-      @Override                      public boolean onJsConfirm(WebView view, String url, String message, JsResult result) {  
-      return super.onJsConfirm(view, url, message, result);  
-      }
+      //点击按钮则调用callAndroid（）方法   
+      onclick="callAndroid()
 
-### [RecyclerView](https://blog.csdn.net/lmj623565791/article/details/45059587)
-### [ListView详细讲解](https://blog.csdn.net/guolin_blog/article/details/44996879)
-### ImageView
-### SurfaceView
-### GLSurfaceView
-### 自定义view
-### 自定义View、ViewGroup注意那些回调？
+      >2. 在Android通过WebViewClient复写shouldOverrideUrlLoading()
+      >>// 设置与Js交互的权限  
+      webSettings.setJavaScriptEnabled(true);  
+      mWebView.setWebViewClient(new WebViewClient() {  
+      @Override  
+      public boolean shouldOverrideUrlLoading(WebView view, String url) {  
+      // 如果url的协议 = 预先约定的 js 协议  
+      // 就解析往下解析参数  
+      Uri uri = Uir.parse(url)  
+      }
+  3. 通过 WebChromeClient的onJsAlert()、onJsConfirm()、onJsPrompt（）方法回调拦截JS对话框alert()、confirm()、prompt（） 消息    
+  >1. 在JS约定所需要的Url协议
+  >>function callAndroid(){  
+    //约定的url协议为：js://webview?arg1=111&arg2=222
+    document.location = "js://webview?arg1=111&arg2=222"  
+    }  
+    //点击按钮则调用callAndroid（）方法   
+    onclick="callAndroid()
+
+    >2.  WebChromeClient复写onJsPrompt（）  
+    >>//设置与Js交互的权限  
+    webSettings.setJavaScriptEnabled(true);
+    mWebView.setWebChromeClient(new WebChromeClient() {  
+    // 拦截输入框(原理同方式2)  
+    @Override  
+    public boolean onJsPrompt(WebView view, String url, String message, String defaultValue, JsPromptResult result) {  
+    // 如果url的协议 = 预先约定的 js 协议  
+    // 就解析往下解析参数  
+    Uri uri = Uir.parse(message)  
+    }  
+    // 拦截JS的警告框  
+    @Override  
+    public boolean onJsAlert(WebView view, String url, String message, JsResult result) {  
+    return super.onJsAlert(view, url, message, result);
+    }  
+    // 拦截JS的确认框  
+    @Override                      public boolean onJsConfirm(WebView view, String url, String message, JsResult result) {  
+    return super.onJsConfirm(view, url, message, result);  
+    }
+
+### 3.4 [RecyclerView](https://blog.csdn.net/lmj623565791/article/details/45059587)
+### 3.5 [ListView详细讲解](https://blog.csdn.net/guolin_blog/article/details/44996879)
+### 3.6 ImageView
+### 3.7 SurfaceView
+### 3.8 GLSurfaceView
+### 3.9 自定义view
+### 3.10 自定义View、ViewGroup注意那些回调？
 1. void onFinishInflate();  
-    当系统解析XML中声明的View后回调此方法，调用顺序：内层View->外层View,如果是viewgroup,适合在这里获取子View。  
+    >当系统解析XML中声明的View后回调此方法，调用顺序：内层View->外层View,如果是viewgroup,适合在这里获取子View。  
     如果View没有在XML中声明而是直接在代码中构造的，则不会回调此方法
     此时无法获取到View的宽高和位置
 2.  void onAttachedToWindow();  
-    当view 被添加到window中回调，调用顺序：外层View->内层View。在XML中声明或在代码中构造，并调用addview（this view）方法都会回调该方法。  
+    >当view 被添加到window中回调，调用顺序：外层View->内层View。在XML中声明或在代码中构造，并调用addview（this view）方法都会回调该方法。  
     此时View仅仅被添加到View，而没有开始绘制所以同样获取不到宽高和位置
 
 
-### Android中动画
+### 3.11 Android中动画
 [1. Frame Animation](https://blog.csdn.net/liuhe688/article/details/6657776)  
 [2. Tween Animation](https://blog.csdn.net/liuhe688/article/details/6660823)  
 [3. Layout Animation](https://blog.csdn.net/guolin_blog/article/details/43536355)  
@@ -206,73 +206,72 @@
 
 
 ## 4 UI原理
-### View，ViewGroup事件分发
+### 4.1 View，ViewGroup事件分发
 
 
 ## 5 Android屏幕适配
-### dp直接适配
-  1. dp是什么，sp呢，有什么区别
+### 5.1 dp直接适配
+  * dp是什么，sp呢，有什么区别
      dp:每英寸的像素点数，比如手机是1080x1920，手机的宽高是3x4英寸的，那么dp就是1080/3和1920/4 。
-  2. sp:除了受屏幕密度影响外,还受到用户的字体大小影响，通常情况下,建议使用sp来跟随用户字体大小设置。
+  * sp:除了受屏幕密度影响外,还受到用户的字体大小影响，通常情况下,建议使用sp来跟随用户字体大小设置。
 
-### 宽高限定符适配
-### smallestWidth适配(sw限定符适配)
-### [UI适配框架](https://github.com/hongyangAndroid/AndroidAutoLayout)（已经停止维护）
-### [今日头条适配方案](https://zhuanlan.zhihu.com/p/37199709?utm_source=weibo&utm_medium=social&utm_oi=27871238160384)
+### 5.2 宽高限定符适配
+### 5.3 smallestWidth适配(sw限定符适配)
+### 5.4 [UI适配框架](https://github.com/hongyangAndroid/AndroidAutoLayout)（已经停止维护）
+### 5.5 [今日头条适配方案](https://zhuanlan.zhihu.com/p/37199709?utm_source=weibo&utm_medium=social&utm_oi=27871238160384)
 
 ## 6 性能优化相关
-### Android屏幕渲染机制
-### 界面卡顿的原因以及解决方法
+### 6.1 Android屏幕渲染机制
+### 6.2 界面卡顿的原因以及解决方法
 >一般人眼感觉卡顿的零界点是60FPS,所以为了让人眼感受不到卡顿，Android系统会每隔16ms发出VSYNC信号重新绘制界面。如果由于各种原因导致界面的刷新频率在16ms之后会出现掉帧的现象，这样会降低界面刷新的频率，导致用户感知到卡顿。主要原因有以下：
-  1. 过于复杂的界面(使用页面复用include、ViewStub、merge等技术简化布局)
-  2. 过度绘制(同上)
-  3. UI线程处理过多任务(将复杂任务放入子线程中处理)
-  4. 频繁的GC(代码优化)
+  >>1. 过于复杂的界面(使用页面复用include、ViewStub、merge等技术简化布局)
+  >>2. 过度绘制(同上)
+  >>3. UI线程处理过多任务(将复杂任务放入子线程中处理)
+  >>4. 频繁的GC(代码优化)
 
 
 ## 7 持久化技术相关    
 
-### Share Preference
-### SQLite
-### ContentProvider
-### File
-### 网络存储
+### 7.1 Share Preference
+### 7.2 SQLite
+### 7.3 ContentProvider
+### 7.4 File
+### 7.5 网络存储
 
 
 ## 8 Crash相关
-### Android中的ANR
-### [内存泄漏如何排查，MAT分析方法以及原理，各种泄漏的原因是什么比如](https://www.jianshu.com/p/ac00e370f83d)
->传统的内存泄漏原因是：忘记释放分配的内存。逻辑内存溢出的原因是：当不再需要这个对象，还未释放该对象的所有引用。Android中的内存泄漏一般分为两种  
-    1. 全局进程的static变量，他无视应用状态，持有Activity的强引用。  
-    2. 活在activity生命周期之外的线程。
+### 8.1 Android中的ANR
+### 8.2 [内存泄漏如何排查，MAT分析方法以及原理，各种泄漏的原因是什么比如](https://www.jianshu.com/p/ac00e370f83d)
+传统的内存泄漏原因是：忘记释放分配的内存。逻辑内存溢出的原因是：当不再需要这个对象，还未释放该对象的所有引用。Android中的内存泄漏一般分为两种  
+1. 全局进程的static变量，他无视应用状态，持有Activity的强引用。  
+2. 活在activity生命周期之外的线程。
 
-  Android中最容易导致内存泄漏的是Context，还有以下情况：
-
-    1. Static Activities
-    2. Static View
-    3. Inner Class且有静态变量的引用
-    4. Anonymous Classes
-    5. Handler
-    6. Threads
-    7. TimerTask
-    8. Sensor Manager
+### 8.3  Android中最容易导致内存泄漏的是Context，还有以下情况：
+1. Static Activities
+2. Static View
+3. Inner Class且有静态变量的引用
+4. Anonymous Classes
+5. Handler
+6. Threads
+7. TimerTask
+8. Sensor Manager
 
 
 
 ## 9 网络、进程与线程
-### AsyncTask
-### [HttpClient与HttpUrlConnection的区别
+### 9.1 AsyncTask
+### 9.2 [HttpClient与HttpUrlConnection的区别
 ](http://blog.csdn.net/guolin_blog/article/details/12452307 )
-### http与https的区别
-### 进程保活（不死进程）
-### 进程间通信的方式(IPC)
-### 加载大图(ImageLoader)
-### Android消息机制
-  Android的消息机制一般指的是Handler的运行机制。Handler的运行机制离不开MessageQueue/Message/Looper/Handler这四个类。  
-  1. Message：消息产生分为硬件生成和软件生成。  
-  2. MessageQueue：主要功能是向消息池投递消息(MessageQueue.enqueueMessage)和取走消息(MessageQueue.next)。  
-  3. Handler：消息辅助类，主要功能向消息池发送各种消息事件(Handler.sendMessage)和处理相应消息事件(Handler.handleMessage)。  
-  4. Looper：不断循环执行(Looper.loop)，按分发机制将消息分发给目标处理者。
+### 9.3 http与https的区别
+### 9.4 进程保活（不死进程）
+### 9.5 进程间通信的方式(IPC)
+### 9.6 加载大图(ImageLoader)
+### 9.7 Android消息机制
+Android的消息机制一般指的是Handler的运行机制。Handler的运行机制离不开MessageQueue/Message/Looper/Handler这四个类。  
+1. Message：消息产生分为硬件生成和软件生成。  
+2. MessageQueue：主要功能是向消息池投递消息(MessageQueue.enqueueMessage)和取走消息(MessageQueue.next)。  
+3. Handler：消息辅助类，主要功能向消息池发送各种消息事件(Handler.sendMessage)和处理相应消息事件(Handler.handleMessage)。  
+4. Looper：不断循环执行(Looper.loop)，按分发机制将消息分发给目标处理者。
 
 ### Android 线程池的实现原理
 ### 讲解一下Context
