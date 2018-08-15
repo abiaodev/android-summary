@@ -91,7 +91,7 @@
   *   resumeTimers() 恢复所有WebView的所有布局，解析和JavaScript计时器，将恢复调度所有计时器。
 ***
 ### 3.3 [WebView与js交互](https://blog.csdn.net/carson_ho/article/details/64904691/)
-1. 对于Android调用JS代码的方法有2种
+#### 3.3.1 对于Android调用JS代码的方法有2种
   1. 通过WebView的loadUrl（） 例如
 
     mWebView.loadUrl("javascript:callJS()");    
@@ -104,20 +104,21 @@
     //此处为 js 返回的结果    
     }    
     });    
-2. 对于JS调用Android代码的方法有3种
-    1. 通过WebView的addJavascriptInterface（）进行对象映射  
 
-      1. 定义一个与JS对象映射关系的Android类  
->public class AndroidtoJs extends Object {  
-        // 定义JS需要调用的方法  
-        // 被JS调用的方法必须加入@JavascriptInterface注解
-        @JavascriptInterface  
-        public void hello(String msg) {  
-        >System.out.println("JS调用了Android的hello方法");  
-        }  
-        }
+#### 3.3.2 对于JS调用Android代码的方法有3种
+  1. 通过WebView的addJavascriptInterface（）进行对象映射  
 
-      2. 在html文件中定义一个调用Android功能的方法
+      >1. 定义一个与JS对象映射关系的Android类  
+      public class AndroidtoJs extends Object {    
+        // 定义JS需要调用的方法    
+        // 被JS调用的方法必须加入@JavascriptInterface注解    
+        @JavascriptInterface    
+        public void hello(String msg) {    
+        System.out.println("JS调用了Android的hello方法");    
+        }    
+        }    
+
+      >2. 在html文件中定义一个调用Android功能的方法
 >function callAndroid(){  
         // 由于对象映射，所以调用test对象等于调用Android映射的对象  
         >test.hello("js调用了android中的hello方法");  
