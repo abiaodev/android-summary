@@ -92,11 +92,11 @@
 
 ### [WebView与js交互](https://blog.csdn.net/carson_ho/article/details/64904691/)
 * 对于Android调用JS代码的方法有2种
-    1. 通过WebView的loadUrl（） 例如：  
-    >mWebView.loadUrl("javascript:callJS()");  
+    1. 通过WebView的loadUrl（） 例如
+>mWebView.loadUrl("javascript:callJS()");  
 
     2. 通过WebView的evaluateJavascript（）  
-    >mWebView.evaluateJavascript（"javascript:callJS()", new ValueCallback<String>() {
+>mWebView.evaluateJavascript（"javascript:callJS()", new ValueCallback<String>() {
       @Override
       public void onReceiveValue(String value) {  
       >//此处为 js 返回的结果  
