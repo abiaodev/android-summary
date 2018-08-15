@@ -1,8 +1,8 @@
 # Android基础面试题
-## Android系统的架构
-1. 应用层(System App)  
+## 1 Android系统的架构
+### 1.1 应用层(System App)  
     系统内置应用与非内置应用，Java开发直接与用户交互。
-2. 应用框架层(Java API Framework)  
+### 1.2 应用框架层(Java API Framework)  
     为开发人员提供开发API，主要包含以下组件  
       1. ActivityManager  
       2. LocationManager  
@@ -13,14 +13,14 @@
       7. WindowManager  
       8. ContentManager  
       9. ViewSystem  
-3. 系统运行库层(Native)  
+### 1.3 系统运行库层(Native)  
     c/c++开发主要分为连个部分
       1. c/c++程序库
       2. Android运行时库
-4. 硬件抽象层(HAL)
-5. Linux内核
+### 1.4 硬件抽象层(HAL)
+### 1.5 Linux内核
 
-##  Android中四大组件
+## 2  Android中四大组件
 1. Activity  
       Activity 表示具有用户界面的单一屏幕。例如，电子邮件应用可能具有一个显示新电子邮件列表的 Activity、一个用于撰写电子邮件的 Activity 以及一个用于阅读电子邮件的 Activity。 尽管这些 Activity 通过协作在电子邮件应用中形成了一种紧密结合的用户体验，但每一个 Activity 都独立于其他 Activity 而存在。因此，其他应用可以启动其中任何一个 Activity（如果电子邮件应用允许）。例如，相机应用可以启动电子邮件应用内用于撰写新电子邮件的 Activity，以便用户共享图片。
 2. Service  
@@ -30,17 +30,17 @@
     尽管广播接收器不会显示用户界面，但它们可以创建状态栏通知，在发生广播事件时提醒用户。 但广播接收器更常见  
     的用途只是作为通向其他组件的“通道”，设计用于执行极少量的工作。 例如，它可能会基于事件发起一项服务来执行某项工作。
 4. ContentProvider  
-        内容提供程序管理一组共享的应用数据。您可以将数据存储在文件系统、SQLite 数据库、网络上或您的应用可以访  
+    内容提供程序管理一组共享的应用数据。您可以将数据存储在文件系统、SQLite 数据库、网络上或您的应用可以访  
     问的任何其他永久性存储位置。 其他应用可以通过内容提供程序查询数据，甚至修改数据（如果内容提供程序允许）。   
     例如，Android 系统可提供管理用户联系人信息的内容提供程序。 因此，任何具有适当权限的应用都可以查询内容提  
     供程序的某一部分（如 ContactsContract.Data），以读取和写入有关特定人员的信息。
   内容提供程序也适用于读取和写入您的应用不共享的私有数据。 例如，记事本示例应用使用内容提供程序来保存笔记。
 
-### Activity的[生命周期](https://blog.csdn.net/android_tutor/article/details/5772285)以及[启动过程](http://gityuan.com/2016/03/12/start-activity/)
-### Activity的四种启动模式及其应用场景
-#### 任务栈
+### 2.1 Activity的[生命周期](https://blog.csdn.net/android_tutor/article/details/5772285)以及[启动过程](http://gityuan.com/2016/03/12/start-activity/)
+### 2.2 Activity的四种启动模式及其应用场景
+#### 2.2.1 任务栈
   程序打开时就创建了一个任务栈, 用于存储当前程序的activity,只有处于栈顶的activity才能与用户进行交互。当把所有activity清除时任务才会销毁。
-#### Activity启动模式
+#### 2.2.2 Activity启动模式
 * STANDARD
      不管有没有已存在的实例，都生成新的实例。
 * SINGLETOP
@@ -50,58 +50,58 @@
 * SINGLEINSTANCE
     启用一个新的栈结构，将Activity放置于这个新的栈结构中，并保证不再有其他Activity实例进入。
 
-### 保存Activity状态
+### 2.3 保存Activity状态
 
-### [Fragment的生命周期](https://blog.csdn.net/lmj623565791/article/details/37970961)
+### 2.4 [Fragment的生命周期](https://blog.csdn.net/lmj623565791/article/details/37970961)
 
-### Service的[生命周期](https://blog.csdn.net/guolin_blog/article/details/11952435)以及[启动过程](http://gityuan.com/2016/03/06/start-service/)
-### Service的两种启动方式
-#### 使用startService启动服务的生命周期方法
-* 使用这种方法启动一个Service，在Service启动后该Service和启动该Service的Activity就没有关系了。所以这种发放启动的Service不能和Activity进行交互。
-* 通常情况下使用startService调用的Service生命周期方法为：onCreate()->onStartCommand()。其中多次调用startService只调用一次onCreate(), 但可以多次调用onStartCommand()。
-* 当服务需要退出时，调用stopService，就会调用Service的onDestroy()方法。
+### 2.5 Service的[生命周期](https://blog.csdn.net/guolin_blog/article/details/11952435)以及[启动过程](http://gityuan.com/2016/03/06/start-service/)
+### 2.6 Service的两种启动方式
+#### 2.6.1 使用startService启动服务的生命周期方法
+1. 使用这种方法启动一个Service，在Service启动后该Service和启动该Service的Activity就没有关系了。所以这种发放启动的Service不能和Activity进行交互。
+2. 通常情况下使用startService调用的Service生命周期方法为：onCreate()->onStartCommand()。其中多次调用startService只调用一次onCreate(), 但可以多次调用onStartCommand()。
+3. 当服务需要退出时，调用stopService，就会调用Service的onDestroy()方法。
 
-#### 使用bindService启动服务的生命周期方法
-* 使用这种方法启动的Service是和调用者Activtiy同生命的，当Activtiy退出时，服务也同时销毁了。这种方法启动的Service能够和Activity进行交互。
-* 调用bindService启动服务，Service生命周期方法为：onCreate()->onBind()多次调用bindService并不会多次调用onBind(),即onCreate()和onBind()都是只被调用一次。
-* 当Activity退出时，该Service销毁，调用：onUnbind()->onDestroy();
+#### 2.6.2 使用bindService启动服务的生命周期方法
+1. 使用这种方法启动的Service是和调用者Activtiy同生命的，当Activtiy退出时，服务也同时销毁了。这种方法启动的Service能够和Activity进行交互。
+2. 调用bindService启动服务，Service生命周期方法为：onCreate()->onBind()多次调用bindService并不会多次调用onBind(),即onCreate()和onBind()都是只被调用一次。
+3. 当Activity退出时，该Service销毁，调用：onUnbind()->onDestroy();
 
-### [Broadcast注册方式与区别](https://blog.csdn.net/carson_ho/article/details/52973504)
+### 2.7 [Broadcast注册方式与区别](https://blog.csdn.net/carson_ho/article/details/52973504)
 静态注册是常驻广播，不受任何组件生命周期的影响，只有在时刻监听广播的时候使用。缺点是耗电占内存。  动态注册则比较灵活可以控制其生命周期，在特定的情况下监听使用。
-#### 静态注册(minifest)
+#### 2.7.1 静态注册(minifest)
 在AndroidManifest.xml里通过标签声明,当此App首次启动时，系统会自动实例化mBroadcastReceiver类，并注册到系统中。
-#### 动态注册
+#### 2.7.2 动态注册
 在代码中通过调用Context的registerReceiver（）方法进行动态注册BroadcastReceiver,动态广播最好在Activity的onResume()注册、onPause()注销。
 
 
 
-## UI相关(使用)
-### Android中常用布局
-#### LinearLayout
-#### TableLayout
-#### RelativeLayout
-#### FrameLayout
-#### AbsoluteLayout
-#### GridLayout
-#### CoordinatorLayout
-### [WebView](https://www.jianshu.com/p/fd61e8f4049e)常用方法
+## 3 UI相关(使用)
+### 3.1 Android中常用布局
+#### 3.1.1 LinearLayout
+#### 3.1.2 TableLayout
+#### 3.1.3 RelativeLayout
+#### 3.1.4 FrameLayout
+#### 3.1.5 AbsoluteLayout
+#### 3.1.6 GridLayout
+#### 3.1.7 CoordinatorLayout
+### 3.2 [WebView](https://www.jianshu.com/p/fd61e8f4049e)常用方法
   *   onPause() 尽力尝试暂停可以暂停的任何处理，如动画和地理位置。 不会暂停JavaScript。 要全局暂停JavaScript，可使用pauseTimers。
   *   onResume() 恢复onPause() 停掉的操作；
   *   pauseTimers() 暂停所有WebView的布局，解析和JavaScript定时器。 这个是一个全局请求，不仅限于这个WebView。
   *   resumeTimers() 恢复所有WebView的所有布局，解析和JavaScript计时器，将恢复调度所有计时器。
 ***
-### [WebView与js交互](https://blog.csdn.net/carson_ho/article/details/64904691/)
+### 3.3 [WebView与js交互](https://blog.csdn.net/carson_ho/article/details/64904691/)
 1. 对于Android调用JS代码的方法有2种
   1. 通过WebView的loadUrl（） 例如
-    mWebView.loadUrl("javascript:callJS()");  
+    mWebView.loadUrl("javascript:callJS()");      
 
   2. 通过WebView的evaluateJavascript（）  
-    mWebView.evaluateJavascript（"javascript:callJS()", new ValueCallback<String>() {  
-    @Override
-    public void onReceiveValue(String value) {  
-    //此处为 js 返回的结果  
-    }
-    });
+    mWebView.evaluateJavascript（"javascript:callJS()", new ValueCallback<String>() {    
+    @Override    
+    public void onReceiveValue(String value) {    
+    //此处为 js 返回的结果    
+    }    
+    });    
 2. 对于JS调用Android代码的方法有3种
     1. 通过WebView的addJavascriptInterface（）进行对象映射  
 
@@ -202,11 +202,11 @@
 [4. Property Animation](https://blog.csdn.net/guolin_blog/article/details/43536355)
 
 
-## UI原理
+## 4 UI原理
 ### View，ViewGroup事件分发
 
 
-## Android屏幕适配
+## 5 Android屏幕适配
 ### dp直接适配
   1. dp是什么，sp呢，有什么区别
      dp:每英寸的像素点数，比如手机是1080x1920，手机的宽高是3x4英寸的，那么dp就是1080/3和1920/4 。
@@ -217,7 +217,7 @@
 ### [UI适配框架](https://github.com/hongyangAndroid/AndroidAutoLayout)（已经停止维护）
 ### [今日头条适配方案](https://zhuanlan.zhihu.com/p/37199709?utm_source=weibo&utm_medium=social&utm_oi=27871238160384)
 
-## 性能优化相关
+## 6 性能优化相关
 ### Android屏幕渲染机制
 ### 界面卡顿的原因以及解决方法
 >一般人眼感觉卡顿的零界点是60FPS,所以为了让人眼感受不到卡顿，Android系统会每隔16ms发出VSYNC信号重新绘制界面。如果由于各种原因导致界面的刷新频率在16ms之后会出现掉帧的现象，这样会降低界面刷新的频率，导致用户感知到卡顿。主要原因有以下：
@@ -227,7 +227,7 @@
   4. 频繁的GC(代码优化)
 
 
-## 持久化技术相关    
+## 7 持久化技术相关    
 
 ### Share Preference
 ### SQLite
@@ -236,7 +236,7 @@
 ### 网络存储
 
 
-## Crash相关
+## 8 Crash相关
 ### Android中的ANR
 ### [内存泄漏如何排查，MAT分析方法以及原理，各种泄漏的原因是什么比如](https://www.jianshu.com/p/ac00e370f83d)
 >传统的内存泄漏原因是：忘记释放分配的内存。逻辑内存溢出的原因是：当不再需要这个对象，还未释放该对象的所有引用。Android中的内存泄漏一般分为两种  
@@ -256,7 +256,7 @@
 
 
 
-## 网络、进程与线程
+## 9 网络、进程与线程
 ### AsyncTask
 ### [HttpClient与HttpUrlConnection的区别
 ](http://blog.csdn.net/guolin_blog/article/details/12452307 )
@@ -275,6 +275,6 @@
 ### 讲解一下Context
 ### Java虚拟机和Dalvik虚拟机的区别
 
-## 设计模式
-## 开源框架
-## 软件架构
+## 10 设计模式
+## 11 开源框架
+## 12 软件架构
