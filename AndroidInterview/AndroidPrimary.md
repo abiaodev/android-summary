@@ -94,11 +94,13 @@ c/c++开发主要分为连个部分
 ***
 ### 3.3 [WebView与js交互](https://blog.csdn.net/carson_ho/article/details/64904691/)
 #### 3.3.1 对于Android调用JS代码的方法有2种
-  1. 通过WebView的loadUrl() 例如:  
-            mWebView.loadUrl("javascript:callJS()");    
+1. 通过WebView的loadUrl() 例如:    
+
+        mWebView.loadUrl("javascript:callJS()");
 
   2. 通过WebView的evaluateJavascript()  
-            mWebView.evaluateJavascript（"javascript:callJS()", new ValueCallback<String>() {    
+
+          mWebView.evaluateJavascript（"javascript:callJS()", new ValueCallback<String>() {    
                 @Override    
                 public void onReceiveValue(String value) {    
                     //此处为 js 返回的结果    
@@ -109,6 +111,7 @@ c/c++开发主要分为连个部分
   1. 通过WebView的addJavascriptInterface（）进行对象映射  
 
       1. 定义一个与JS对象映射关系的Android类  
+
               public class AndroidtoJs extends Object {    
                   // 定义JS需要调用的方法    
                   // 被JS调用的方法必须加入@JavascriptInterface注解    
@@ -119,12 +122,14 @@ c/c++开发主要分为连个部分
               }    
 
       2. 在html文件中定义一个调用Android功能的方法  
+
               function callAndroid(){    
                   // 由于对象映射，所以调用test对象等于调用Android映射的对象    
                   test.hello("js调用了android中的hello方法");    
               }    
 
       3. 在Android里通过WebView设置Android类与JS代码的映射  
+
               // 设置与Js交互的权限    
               webSettings.setJavaScriptEnabled(true);    
               // 通过addJavascriptInterface()将Java对象映射到JS对象    
@@ -135,6 +140,7 @@ c/c++开发主要分为连个部分
   2. 通过 WebViewClient 的shouldOverrideUrlLoading ()方法回调拦截 url  
 
       1. 在JS约定所需要的Url协议  
+
               function callAndroid(){    
                   //约定的url协议为：js://webview?arg1=111&arg2=222    
                   document.location = "js://webview?arg1=111&arg2=222";    
@@ -143,6 +149,7 @@ c/c++开发主要分为连个部分
               onclick="callAndroid()"    
 
       2. 在Android通过WebViewClient复写shouldOverrideUrlLoading()
+
               // 设置与Js交互的权限    
               webSettings.setJavaScriptEnabled(true);    
               mWebView.setWebViewClient(new WebViewClient() {    
@@ -155,6 +162,7 @@ c/c++开发主要分为连个部分
              }
   3. 通过 WebChromeClient的onJsAlert()、onJsConfirm()、onJsPrompt（）方法回调拦截JS对话框alert()、confirm()、prompt（） 消息  
       1. 在JS约定所需要的Url协议    
+
               function callAndroid(){    
                   //约定的url协议为：js://webview?arg1=111&arg2=222    
                   document.location = "js://webview?arg1=111&arg2=222"    
@@ -163,27 +171,28 @@ c/c++开发主要分为连个部分
               onclick="callAndroid()"    
 
       2.  WebChromeClient复写onJsPrompt()  
-                  //设置与Js交互的权限    
-                  webSettings.setJavaScriptEnabled(true);    
-                  mWebView.setWebChromeClient(new WebChromeClient() {    
-                      // 拦截输入框(原理同方式2)    
-                      @Override    
-                      public boolean onJsPrompt(WebView view, String url, String message, String defaultValue, JsPromptResult result) {
-                          // 如果url的协议 = 预先约定的 js 协议    
-                          // 就解析往下解析参数    
-                          Uri uri = Uir.parse(message)    
-                      }    
-                      // 拦截JS的警告框    
-                      @Override    
-                      public boolean onJsAlert(WebView view, String url, String message, JsResult result) {    
-                          return super.onJsAlert(view, url, message, result);    
-                      }    
-                      // 拦截JS的确认框    
-                      @Override    
-                      public boolean onJsConfirm(WebView view, String url, String message, JsResult result) {    
+
+              //设置与Js交互的权限    
+              webSettings.setJavaScriptEnabled(true);    
+              mWebView.setWebChromeClient(new WebChromeClient() {    
+                  // 拦截输入框(原理同方式2)    
+                  @Override    
+                  public boolean onJsPrompt(WebView view, String url, String message, String defaultValue, JsPromptResult result) {
+                        // 如果url的协议 = 预先约定的 js 协议    
+                        // 就解析往下解析参数    
+                        Uri uri = Uir.parse(message);   
+                  }    
+                  // 拦截JS的警告框    
+                  @Override    
+                  public boolean onJsAlert(WebView view, String url, String message, JsResult result) {    
+                        return super.onJsAlert(view, url, message, result);    
+                  }    
+                  // 拦截JS的确认框    
+                  @Override    
+                  public boolean onJsConfirm(WebView view, String url, String message, JsResult result) {    
                           return super.onJsConfirm(view, url, message, result);    
-                      }    
-                  }
+                    }    
+                }
 ### 3.4 [RecyclerView](https://blog.csdn.net/lmj623565791/article/details/45059587)
 ### 3.5 [ListView详细讲解](https://blog.csdn.net/guolin_blog/article/details/44996879)
 ### 3.6 ImageView
@@ -226,6 +235,7 @@ c/c++开发主要分为连个部分
 >3. public boolean onTouchEvent(MotionEvent me)--------在1中调用，用来处理事件，返回是否消耗当前事件。如果不消耗，当前View将不会再接收该事件序列中的事件。
 
 2. 三个方法的关系如以下伪代码    
+
         public boolean dispatchTouchEvent(MotionEvent me){    
             boolean consume = false;    
             if(onInterceptTouchEvent(me)){    
@@ -321,11 +331,14 @@ MyAsyncTask myAsyncTask = new MyAsyncTask(this);      myAsyncTask.execute(参数
 #### 9.8.2 HandlerThread
 HandlerThread能够新建拥有Looper的线程。这个Looper能够用来新建其他的Handler。主要用途是用于会长时间在后台运行，并且间隔时间内（或适当情况下）会调用的情况，例子：实现IntentService或实时更新等，以下是使用步骤
 1. 创建HandlerThread实例:  
+
             mHandlerThread = new HandlerThread("check-message-coming");    
             mHandlerThread.start();    
 2. 创建并初始化主线程的Handler:  
+
             mainThreadHandler = new Handler();    
 3. 通过HandlerThread创建并初始化子线程的Handler:   
+
             subThreadHandler = new Handler(mHandlerThread.getLooper()){  
                 @Override
                 public void handleMessage(Message msg){  
@@ -342,6 +355,7 @@ HandlerThread能够新建拥有Looper的线程。这个Looper能够用来新建�
                 }
             }
 4. 在页面开始的时候通知执行，暂停的时候通知停止，销毁的时候释放HandlerThread
+
             @Override    
             protected void onResume()    
             {    
@@ -374,13 +388,14 @@ IntentService，可以看做是Service和HandlerThread的结合体，在完成�
     3. 如果启动 IntentService 多次，那么每一个耗时操作会以工作队列的方式在 IntentService 的 onHandleIntent 回调方法中执行，依次去执行，使用串行的方式，执行完自动结束。
 使用步骤
 1. 创建一个Server继承IntentService例如：    
-            public class MyIntentService extends IntentService{
-                private static final String TAG = "TAG_MyIntentService";
-                /**
-                * Creates an IntentService.  Invoked by your subclass's constructor.
-                  *
-                * @param name Used to name the worker thread, important only for debugging.
-                  */
+
+          public class MyIntentService extends IntentService{
+              private static final String TAG = "TAG_MyIntentService";
+              /**
+                 * Creates an IntentService.  Invoked by your subclass's constructor.
+                 *
+                 * @param name Used to name the worker thread, important only for debugging.
+                 */
                 public MyIntentService(String name) {
                       super(name);
                 }
@@ -400,10 +415,11 @@ IntentService，可以看做是Service和HandlerThread的结合体，在完成�
                 public void onDestroy() {
                     super.onDestroy();
                     Log.d(TAG,"MyIntentService destroy");
-                  }
                 }
+            }
 2. 在manifest中注册MyIntentService  
 3. 通过Intent启动MyIntentService  
+
             Intent intent = new Intent(MainActivity.this,MyIntentService.class);
             intent.putExtra("task_action","com.intent.biao.task1");
             startService(intent);
