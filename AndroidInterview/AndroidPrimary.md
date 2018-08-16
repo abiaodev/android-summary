@@ -110,8 +110,8 @@ c/c++开发主要分为连个部分
 #### 3.3.2 对于JS调用Android代码的方法有3种
   1. 通过WebView的addJavascriptInterface（）进行对象映射  
 
-      >1. 定义一个与JS对象映射关系的Android类  
-      public class AndroidtoJs extends Object {    
+      1. 定义一个与JS对象映射关系的Android类  
+      >public class AndroidtoJs extends Object {    
         // 定义JS需要调用的方法    
         // 被JS调用的方法必须加入@JavascriptInterface注解    
         @JavascriptInterface    
@@ -120,14 +120,14 @@ c/c++开发主要分为连个部分
         }    
         }    
 
-      >2. 在html文件中定义一个调用Android功能的方法  
-      function callAndroid(){    
+      2. 在html文件中定义一个调用Android功能的方法  
+      >function callAndroid(){    
         // 由于对象映射，所以调用test对象等于调用Android映射的对象    
         test.hello("js调用了android中的hello方法");    
         }    
 
-      >3. 在Android里通过WebView设置Android类与JS代码的映射  
-      // 设置与Js交互的权限    
+      3. 在Android里通过WebView设置Android类与JS代码的映射  
+      >// 设置与Js交互的权限    
       webSettings.setJavaScriptEnabled(true);    
       // 通过addJavascriptInterface()将Java对象映射到JS对象    
       //参数1：Javascript对象名    
@@ -136,16 +136,16 @@ c/c++开发主要分为连个部分
 
   2. 通过 WebViewClient 的shouldOverrideUrlLoading ()方法回调拦截 url  
 
-      >1. 在JS约定所需要的Url协议  
-      function callAndroid(){    
+      1. 在JS约定所需要的Url协议  
+      >function callAndroid(){    
       //约定的url协议为：js://webview?arg1=111&arg2=222    
       document.location = "js://webview?arg1=111&arg2=222";    
       }    
       //点击按钮则调用callAndroid（）方法    
       onclick="callAndroid()"    
 
-      >2. 在Android通过WebViewClient复写shouldOverrideUrlLoading()
-      // 设置与Js交互的权限    
+      2. 在Android通过WebViewClient复写shouldOverrideUrlLoading()
+      >// 设置与Js交互的权限    
       webSettings.setJavaScriptEnabled(true);    
       mWebView.setWebViewClient(new WebViewClient() {    
       @Override    
@@ -157,16 +157,16 @@ c/c++开发主要分为连个部分
 
   3. 通过 WebChromeClient的onJsAlert()、onJsConfirm()、onJsPrompt（）方法回调拦截JS对话框alert()、confirm()、prompt（） 消息  
 
-    >1. 在JS约定所需要的Url协议  
-    function callAndroid(){    
+    1. 在JS约定所需要的Url协议  
+    >function callAndroid(){    
     //约定的url协议为：js://webview?arg1=111&arg2=222    
     document.location = "js://webview?arg1=111&arg2=222"      
     }    
     //点击按钮则调用callAndroid（）方法    
     onclick="callAndroid()"    
 
-    >2.  WebChromeClient复写onJsPrompt()    
-    //设置与Js交互的权限    
+    2.  WebChromeClient复写onJsPrompt()    
+    >//设置与Js交互的权限    
     webSettings.setJavaScriptEnabled(true);    
     mWebView.setWebChromeClient(new WebChromeClient() {    
     // 拦截输入框(原理同方式2)    
