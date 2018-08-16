@@ -211,7 +211,33 @@ c/c++开发主要分为连个部分
 
 ***
 ## 4 UI原理
-### 4.1 View，ViewGroup事件分发
+### 4.1 View、ViewGroup事件分发
+#### 4.1.1 MotionEvent
+当用户点击屏幕的时候会触发以下一系列的事件，常见的事件如下：  
+>1.  ACTION_DOWN------手指接触屏幕
+>2. ACTION_MOVE------手指在屏幕是移动
+>3. ACTION_UP------手指离开屏幕
+
+可以通过以下方法获得当前手指坐标：  
+>1. getX()、getY()------获取相对于当前View的X,Y坐标
+>2. getRawX()、getRawY()------获取相对于当前屏幕的X,Y坐标
+
+#### 4.1.2 点击事件的传递规则
+1. 当系统产生一个MotionEvent之后，要将其传递给一个具体的View的过程就是事件传递的过程。这个过程需要用到以下三个重要的方法。
+>1. public boolean dispatchTouchEvent(MotionEvent me)------事件传递到的View的这个方法一定会调用，返回结果当前时间是否被消耗受2，3结果影响。
+>2. public boolean onInterceptTouchEvent(MotionEvent me)------在1内调用，返回是否拦截事件，如果拦截，在当前View的事件序列中该方法不会再调用。
+>3. public boolean onTouchEvent(MotionEvent me)------在1中调用，用来处理事件，返回是否消耗当前事件。如果不消耗，当前View将不会再接收该事件序列中的事件。
+
+2. 三个方法的关系如以下伪代码  
+>public boolean dispatchTouchEvent(MotionEvent me){    
+boolean consume = false;    
+if(onInterceptTouchEvent(me)){    
+consume = onTouchEvent(me);    
+}else{    
+consume = dispatchTouchEvent(me);    
+}    
+return consume;
+}
 
 ***
 ## 5 Android屏幕适配
@@ -235,9 +261,9 @@ c/c++开发主要分为连个部分
   >>4. 频繁的GC(代码优化)
 
 ***
-## 7 持久化技术相关    
+## 7 持久化技术相关
 
-### 7.1 Share Preference
+### 7.1 SharePreference
 ### 7.2 SQLite
 ### 7.3 ContentProvider
 ### 7.4 File
