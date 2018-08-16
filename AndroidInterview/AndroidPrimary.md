@@ -95,15 +95,15 @@ c/c++开发主要分为连个部分
 ### 3.3 [WebView与js交互](https://blog.csdn.net/carson_ho/article/details/64904691/)
 #### 3.3.1 对于Android调用JS代码的方法有2种
   1. 通过WebView的loadUrl() 例如:  
-          mWebView.loadUrl("javascript:callJS()");    
+            mWebView.loadUrl("javascript:callJS()");    
 
   2. 通过WebView的evaluateJavascript()  
-          mWebView.evaluateJavascript（"javascript:callJS()", new ValueCallback<String>() {    
-              @Override    
-              public void onReceiveValue(String value) {    
-                  //此处为 js 返回的结果    
-              }    
-          });    
+            mWebView.evaluateJavascript（"javascript:callJS()", new ValueCallback<String>() {    
+                @Override    
+                public void onReceiveValue(String value) {    
+                    //此处为 js 返回的结果    
+                }    
+            });    
 
 #### 3.3.2 对于JS调用Android代码的方法有3种
   1. 通过WebView的addJavascriptInterface（）进行对象映射  
@@ -163,27 +163,27 @@ c/c++开发主要分为连个部分
               onclick="callAndroid()"    
 
       2.  WebChromeClient复写onJsPrompt()  
-              //设置与Js交互的权限    
-              webSettings.setJavaScriptEnabled(true);    
-              mWebView.setWebChromeClient(new WebChromeClient() {    
-                  // 拦截输入框(原理同方式2)    
-                  @Override    
-                  public boolean onJsPrompt(WebView view, String url, String message, String defaultValue, JsPromptResult result) {
-                      // 如果url的协议 = 预先约定的 js 协议    
-                      // 就解析往下解析参数    
-                      Uri uri = Uir.parse(message)    
-                  }    
-                  // 拦截JS的警告框    
-                  @Override    
-                  public boolean onJsAlert(WebView view, String url, String message, JsResult result) {    
-                      return super.onJsAlert(view, url, message, result);    
-                  }    
-                  // 拦截JS的确认框    
-                  @Override    
-                  public boolean onJsConfirm(WebView view, String url, String message, JsResult result) {    
-                      return super.onJsConfirm(view, url, message, result);    
-                  }    
-              }
+                  //设置与Js交互的权限    
+                  webSettings.setJavaScriptEnabled(true);    
+                  mWebView.setWebChromeClient(new WebChromeClient() {    
+                      // 拦截输入框(原理同方式2)    
+                      @Override    
+                      public boolean onJsPrompt(WebView view, String url, String message, String defaultValue, JsPromptResult result) {
+                          // 如果url的协议 = 预先约定的 js 协议    
+                          // 就解析往下解析参数    
+                          Uri uri = Uir.parse(message)    
+                      }    
+                      // 拦截JS的警告框    
+                      @Override    
+                      public boolean onJsAlert(WebView view, String url, String message, JsResult result) {    
+                          return super.onJsAlert(view, url, message, result);    
+                      }    
+                      // 拦截JS的确认框    
+                      @Override    
+                      public boolean onJsConfirm(WebView view, String url, String message, JsResult result) {    
+                          return super.onJsConfirm(view, url, message, result);    
+                      }    
+                  }
 ### 3.4 [RecyclerView](https://blog.csdn.net/lmj623565791/article/details/45059587)
 ### 3.5 [ListView详细讲解](https://blog.csdn.net/guolin_blog/article/details/44996879)
 ### 3.6 ImageView
