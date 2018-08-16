@@ -321,10 +321,10 @@ MyAsyncTask myAsyncTask = new MyAsyncTask(this);      myAsyncTask.execute(参数
 #### 9.8.2 HandlerThread
 HandlerThread能够新建拥有Looper的线程。这个Looper能够用来新建其他的Handler。主要用途是用于会长时间在后台运行，并且间隔时间内（或适当情况下）会调用的情况，例子：实现IntentService或实时更新等，以下是使用步骤
 1. 创建HandlerThread实例:  
-        mHandlerThread = new HandlerThread("check-message-coming");    
-        mHandlerThread.start();    
+            mHandlerThread = new HandlerThread("check-message-coming");    
+            mHandlerThread.start();    
 2. 创建并初始化主线程的Handler:  
-        mainThreadHandler = new Handler();    
+            mainThreadHandler = new Handler();    
 3. 通过HandlerThread创建并初始化子线程的Handler:   
             subThreadHandler = new Handler(mHandlerThread.getLooper()){  
                 @Override
@@ -358,14 +358,14 @@ HandlerThread能够新建拥有Looper的线程。这个Looper能够用来新建�
                 //以防退出界面后Handler还在执行
                 isUpdateInfo = false;
                 subThreadHandler.removeMessages(MSG_UPDATE_INFO);
-              }
-              @Override
-              protected void onDestroy()
-              {
-                  super.onDestroy();
-                  //释放资源
-                  mHandlerThread.quit();
-              }
+            }
+            @Override
+            protected void onDestroy()
+            {
+                super.onDestroy();
+                //释放资源
+                mHandlerThread.quit();
+            }
 
 #### 9.8.3 IntentService
 IntentService，可以看做是Service和HandlerThread的结合体，在完成了使命之后会自动停止，适合需要在工作线程处理UI无关任务的场景。
@@ -373,37 +373,37 @@ IntentService，可以看做是Service和HandlerThread的结合体，在完成�
     2. 当任务执行完后，IntentService 会自动停止，不需要我们去手动结束。
     3. 如果启动 IntentService 多次，那么每一个耗时操作会以工作队列的方式在 IntentService 的 onHandleIntent 回调方法中执行，依次去执行，使用串行的方式，执行完自动结束。
 使用步骤
-1. 创建一个Server继承IntentService例如：
-              public class MyIntentService extends IntentService{
-                  private static final String TAG = "TAG_MyIntentService";
-                  /**
-                  * Creates an IntentService.  Invoked by your subclass's constructor.
+1. 创建一个Server继承IntentService例如：    
+            public class MyIntentService extends IntentService{
+                private static final String TAG = "TAG_MyIntentService";
+                /**
+                * Creates an IntentService.  Invoked by your subclass's constructor.
                   *
-                  * @param name Used to name the worker thread, important only for debugging.
+                * @param name Used to name the worker thread, important only for debugging.
                   */
-                  public MyIntentService(String name) {
+                public MyIntentService(String name) {
                       super(name);
-                  }
-                  public MyIntentService(){
-                      super(TAG);
-                  }
-                  @Override
-                  protected void onHandleIntent(@Nullable Intent intent) {
-                      //执行异步任务
-                      String action = intent.getStringExtra("task_action");
-                      if (action.equals("com.intent.biao.task1")){
-                          Log.d(TAG,"onHandleIntent com.intent.biao.task1");
-                      }
-                  }
+                }
+                public MyIntentService(){
+                    super(TAG);
+                }
+                @Override
+                protected void onHandleIntent(@Nullable Intent intent) {
+                    //执行异步任务
+                    String action = intent.getStringExtra("task_action");
+                    if (action.equals("com.intent.biao.task1")){
+                        Log.d(TAG,"onHandleIntent com.intent.biao.task1");
+                    }
+                }
 
-                  @Override
-                  public void onDestroy() {
-                      super.onDestroy();
-                      Log.d(TAG,"MyIntentService destroy");
+                @Override
+                public void onDestroy() {
+                    super.onDestroy();
+                    Log.d(TAG,"MyIntentService destroy");
                   }
-              }
-2. 在manifest中注册MyIntentService
-3. 通过Intent启动MyIntentService
+                }
+2. 在manifest中注册MyIntentService  
+3. 通过Intent启动MyIntentService  
             Intent intent = new Intent(MainActivity.this,MyIntentService.class);
             intent.putExtra("task_action","com.intent.biao.task1");
             startService(intent);
