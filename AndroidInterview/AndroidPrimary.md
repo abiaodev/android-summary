@@ -156,35 +156,35 @@ c/c++开发主要分为连个部分
       }    
 
   3. 通过 WebChromeClient的onJsAlert()、onJsConfirm()、onJsPrompt（）方法回调拦截JS对话框alert()、confirm()、prompt（） 消息  
-    1. 在JS约定所需要的Url协议    
-    >function callAndroid(){    
-    //约定的url协议为：js://webview?arg1=111&arg2=222    
-    document.location = "js://webview?arg1=111&arg2=222"    
-    }    
-    //点击按钮则调用callAndroid（）方法    
-    onclick="callAndroid()"    
+      1. 在JS约定所需要的Url协议    
+      >function callAndroid(){    
+      //约定的url协议为：js://webview?arg1=111&arg2=222    
+      document.location = "js://webview?arg1=111&arg2=222"    
+      }    
+      //点击按钮则调用callAndroid（）方法    
+      onclick="callAndroid()"    
 
-    2.  WebChromeClient复写onJsPrompt()  
-    >//设置与Js交互的权限    
-    webSettings.setJavaScriptEnabled(true);    
-    mWebView.setWebChromeClient(new WebChromeClient() {    
-    // 拦截输入框(原理同方式2)    
-    @Override    
-    public boolean onJsPrompt(WebView view, String url, String message, String defaultValue, JsPromptResult result) {    
-    // 如果url的协议 = 预先约定的 js 协议    
-    // 就解析往下解析参数    
-    Uri uri = Uir.parse(message)    
-    }    
-    // 拦截JS的警告框    
-    @Override    
-    public boolean onJsAlert(WebView view, String url, String message, JsResult result) {    
-    return super.onJsAlert(view, url, message, result);    
-    }    
-    // 拦截JS的确认框    
-    @Override    
-    public boolean onJsConfirm(WebView view, String url, String message, JsResult result) {    
-    return super.onJsConfirm(view, url, message, result);    
-    }    
+      2.  WebChromeClient复写onJsPrompt()  
+      >//设置与Js交互的权限    
+      webSettings.setJavaScriptEnabled(true);    
+      mWebView.setWebChromeClient(new WebChromeClient() {    
+      // 拦截输入框(原理同方式2)    
+      @Override    
+      public boolean onJsPrompt(WebView view, String url, String message, String defaultValue, JsPromptResult result) {    
+      // 如果url的协议 = 预先约定的 js 协议    
+      // 就解析往下解析参数    
+      Uri uri = Uir.parse(message)    
+      }    
+      // 拦截JS的警告框    
+      @Override    
+      public boolean onJsAlert(WebView view, String url, String message, JsResult result) {    
+      return super.onJsAlert(view, url, message, result);    
+      }    
+      // 拦截JS的确认框    
+      @Override    
+      public boolean onJsConfirm(WebView view, String url, String message, JsResult result) {    
+      return super.onJsConfirm(view, url, message, result);    
+      }    
 
 ### 3.4 [RecyclerView](https://blog.csdn.net/lmj623565791/article/details/45059587)
 ### 3.5 [ListView详细讲解](https://blog.csdn.net/guolin_blog/article/details/44996879)
