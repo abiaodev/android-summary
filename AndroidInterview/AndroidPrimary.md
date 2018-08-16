@@ -225,7 +225,7 @@ c/c++开发主要分为连个部分
 >2. public boolean onInterceptTouchEvent(MotionEvent me)--------在1内调用，返回是否拦截事件，如果拦截，在当前View的事件序列中该方法不会再调用。
 >3. public boolean onTouchEvent(MotionEvent me)--------在1中调用，用来处理事件，返回是否消耗当前事件。如果不消耗，当前View将不会再接收该事件序列中的事件。
 
-2. 三个方法的关系如以下伪代码  
+2. 三个方法的关系如以下伪代码    
         public boolean dispatchTouchEvent(MotionEvent me){    
             boolean consume = false;    
             if(onInterceptTouchEvent(me)){    
