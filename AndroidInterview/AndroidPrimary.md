@@ -295,26 +295,26 @@ c/c++开发主要分为连个部分
 ### 9.6 加载大图(ImageLoader)
 ### 9.7 Android消息机制
 Android的消息机制一般指的是Handler的运行机制。Handler的运行机制离不开MessageQueue/Message/Looper/Handler这四个类。  
->1. Message---------------消息产生分为硬件生成和软件生成。  
+1. Message---------------消息产生分为硬件生成和软件生成。  
 2. MessageQueue--------主要功能是向消息池投递消息(MessageQueue.enqueueMessage)和取走消息(MessageQueue.next)。  
 3. Handler----------------消息辅助类，主要功能向消息池发送各种消息事件(Handler.sendMessage)和处理相应消息事件(Handler.handleMessage)。  
 4. Looper-----------------不断循环执行(Looper.loop)，按分发机制将消息分发给目标处理者。
 
 具体过程如下：  
->1. 在一个有Looper的线程中创建Handler之后，Handler就可以和其内部的MessageQueue和Looper一起运转。  
+1. 在一个有Looper的线程中创建Handler之后，Handler就可以和其内部的MessageQueue和Looper一起运转。  
 2. 通过handler的post(new Runnable)或者send(new Message)方法去调用MessageQueue的enqueueMessage方法将消息放入MessageQueue。  
 3. 当Looper发现新消息到来时，就会处理这个消息，就是消息中的Runnable或者handler的handleMessage()会执行。因为Looper是存在于创建Handler的线程中，所以处理消息是在创建Handler的那个线程中。
 
 ### 9.8 Android线程
 #### 9.8.1 AsyncTask
 AsyncTask是一个轻量级的异步任务类，他可以在线程池中执行后台任务，并将执行的进度和结果传递给主线程。AsyncTask是一个抽象的泛型类，是对Thread和Handler的轻量级封装。他提供了以下四个核心方法：
->1. onPreExecute()------------------------------在主线程中执行，在异步任务执行之前，用于准备工作。
+1. onPreExecute()------------------------------在主线程中执行，在异步任务执行之前，用于准备工作。
 2. doInBackGround(Params...params)------在线程池中执行，params表示异步任务的输入参数。再次方法中可以调用publishProgress()来更新任务进度，次方法会调用onProgressUpdate(),而且次方法需要返回计算结果给onPostExecute()。
 3. onProgressUpdate(progress...values)----在主线程中执行，当后台任务执行进度发生改变时调用。
 4. onPostExecute(Result result)-------------在主线程中执行，异步任务完成之后，result是doInBackground的值。
 
 使用步骤
->1. 创建一个类MyAsyncTask继承AsyncTask<Void,Integer,Integer>并重写以上三个方法。
+1. 创建一个类MyAsyncTask继承AsyncTask<Void,Integer,Integer>并重写以上三个方法。
 2. 创建实例，并执行  
 MyAsyncTask myAsyncTask = new MyAsyncTask(this);      myAsyncTask.execute(参数);    
 
@@ -326,88 +326,87 @@ HandlerThread能够新建拥有Looper的线程。这个Looper能够用来新建�
 2. 创建并初始化主线程的Handler:  
         mainThreadHandler = new Handler();    
 3. 通过HandlerThread创建并初始化子线程的Handler:   
-        subThreadHandler = new Handler(mHandlerThread.getLooper()){  
-            @Override
-            public void handleMessage(Message msg){  
-                //模拟数据更新    
-                mainThreadHandler.post(new Runnable(){    
-                  @Override    
-                  public void run(){     
-                    //更新主线程UI    
-                  }
-          });    
-          if (isUpdateInfo){    
-              //mainThreadHandler继续    
-              subThreadHandler.sendEmptyMessage(MSG_UPDATE_INFO);
+            subThreadHandler = new Handler(mHandlerThread.getLooper()){  
+                @Override
+                public void handleMessage(Message msg){  
+                    //模拟数据更新    
+                    mainThreadHandler.post(new Runnable(){    
+                      @Override    
+                      public void run(){     
+                        //更新主线程UI    
+                      }
+              });    
+              if (isUpdateInfo){    
+                  //mainThreadHandler继续    
+                  subThreadHandler.sendEmptyMessage(MSG_UPDATE_INFO);
+                }
             }
-        }
 4. 在页面开始的时候通知执行，暂停的时候通知停止，销毁的时候释放HandlerThread
-        @Override    
-        protected void onResume()    
-        {    
-            super.onResume();    
-            //开始查询    
-            isUpdateInfo = true;    
-            subThreadHandler.sendEmptyMessage(MSG_UPDATE_INFO);    
-        }    
-        @Override
-        protected void onPause()
-        {
-            super.onPause();
-            //停止查询
-            //以防退出界面后Handler还在执行
-            isUpdateInfo = false;
-            subThreadHandler.removeMessages(MSG_UPDATE_INFO);
-          }
-          @Override
-          protected void onDestroy()
-          {
-              super.onDestroy();
-              //释放资源
-              mHandlerThread.quit();
-          }
-
+            @Override    
+            protected void onResume()    
+            {    
+                super.onResume();    
+                //开始查询    
+                isUpdateInfo = true;    
+                subThreadHandler.sendEmptyMessage(MSG_UPDATE_INFO);    
+            }    
+            @Override
+            protected void onPause()
+            {
+                super.onPause();
+                //停止查询
+                //以防退出界面后Handler还在执行
+                isUpdateInfo = false;
+                subThreadHandler.removeMessages(MSG_UPDATE_INFO);
+              }
+              @Override
+              protected void onDestroy()
+              {
+                  super.onDestroy();
+                  //释放资源
+                  mHandlerThread.quit();
+              }
 
 #### 9.8.3 IntentService
 IntentService，可以看做是Service和HandlerThread的结合体，在完成了使命之后会自动停止，适合需要在工作线程处理UI无关任务的场景。
-      1. IntentService 是继承自 Service 并处理异步请求的一个类，在 IntentService 内有一个工作线程来处理耗时操作。
-      2. 当任务执行完后，IntentService 会自动停止，不需要我们去手动结束。
-      3. 如果启动 IntentService 多次，那么每一个耗时操作会以工作队列的方式在 IntentService 的 onHandleIntent 回调方法中执行，依次去执行，使用串行的方式，执行完自动结束。
+    1. IntentService 是继承自 Service 并处理异步请求的一个类，在 IntentService 内有一个工作线程来处理耗时操作。
+    2. 当任务执行完后，IntentService 会自动停止，不需要我们去手动结束。
+    3. 如果启动 IntentService 多次，那么每一个耗时操作会以工作队列的方式在 IntentService 的 onHandleIntent 回调方法中执行，依次去执行，使用串行的方式，执行完自动结束。
 使用步骤
 1. 创建一个Server继承IntentService例如：
-        public class MyIntentService extends IntentService{
-            private static final String TAG = "TAG_MyIntentService";
-            /**
-            * Creates an IntentService.  Invoked by your subclass's constructor.
-            *
-            * @param name Used to name the worker thread, important only for debugging.
-            */
-            public MyIntentService(String name) {
-                super(name);
-            }
-            public MyIntentService(){
-                super(TAG);
-            }
-            @Override
-            protected void onHandleIntent(@Nullable Intent intent) {
-                //执行异步任务
-                String action = intent.getStringExtra("task_action");
-                if (action.equals("com.intent.biao.task1")){
-                    Log.d(TAG,"onHandleIntent com.intent.biao.task1");
-                }
-            }
+              public class MyIntentService extends IntentService{
+                  private static final String TAG = "TAG_MyIntentService";
+                  /**
+                  * Creates an IntentService.  Invoked by your subclass's constructor.
+                  *
+                  * @param name Used to name the worker thread, important only for debugging.
+                  */
+                  public MyIntentService(String name) {
+                      super(name);
+                  }
+                  public MyIntentService(){
+                      super(TAG);
+                  }
+                  @Override
+                  protected void onHandleIntent(@Nullable Intent intent) {
+                      //执行异步任务
+                      String action = intent.getStringExtra("task_action");
+                      if (action.equals("com.intent.biao.task1")){
+                          Log.d(TAG,"onHandleIntent com.intent.biao.task1");
+                      }
+                  }
 
-            @Override
-            public void onDestroy() {
-                super.onDestroy();
-                Log.d(TAG,"MyIntentService destroy");
-            }
-        }
+                  @Override
+                  public void onDestroy() {
+                      super.onDestroy();
+                      Log.d(TAG,"MyIntentService destroy");
+                  }
+              }
 2. 在manifest中注册MyIntentService
 3. 通过Intent启动MyIntentService
-        Intent intent = new Intent(MainActivity.this,MyIntentService.class);
-        intent.putExtra("task_action","com.intent.biao.task1");
-        startService(intent);
+            Intent intent = new Intent(MainActivity.this,MyIntentService.class);
+            intent.putExtra("task_action","com.intent.biao.task1");
+            startService(intent);
 
 #### 9.8.4
 ### 9.10 Android 线程池的实现原理
