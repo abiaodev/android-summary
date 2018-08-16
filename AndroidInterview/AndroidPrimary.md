@@ -95,95 +95,95 @@ c/c++开发主要分为连个部分
 ### 3.3 [WebView与js交互](https://blog.csdn.net/carson_ho/article/details/64904691/)
 #### 3.3.1 对于Android调用JS代码的方法有2种
   1. 通过WebView的loadUrl() 例如:  
-  >mWebView.loadUrl("javascript:callJS()");    
+          mWebView.loadUrl("javascript:callJS()");    
 
   2. 通过WebView的evaluateJavascript()  
-  >mWebView.evaluateJavascript（"javascript:callJS()", new ValueCallback<String>() {    
-    @Override    
-    public void onReceiveValue(String value) {    
-    //此处为 js 返回的结果    
-    }    
-    });    
+          mWebView.evaluateJavascript（"javascript:callJS()", new ValueCallback<String>() {    
+              @Override    
+              public void onReceiveValue(String value) {    
+                  //此处为 js 返回的结果    
+              }    
+          });    
 
 #### 3.3.2 对于JS调用Android代码的方法有3种
   1. 通过WebView的addJavascriptInterface（）进行对象映射  
 
       1. 定义一个与JS对象映射关系的Android类  
-      >public class AndroidtoJs extends Object {    
-        // 定义JS需要调用的方法    
-        // 被JS调用的方法必须加入@JavascriptInterface注解    
-        @JavascriptInterface    
-        public void hello(String msg) {    
-        System.out.println("JS调用了Android的hello方法");    
-        }    
-        }    
+              public class AndroidtoJs extends Object {    
+                  // 定义JS需要调用的方法    
+                  // 被JS调用的方法必须加入@JavascriptInterface注解    
+                  @JavascriptInterface    
+                  public void hello(String msg) {    
+                      System.out.println("JS调用了Android的hello方法");    
+                  }    
+              }    
 
       2. 在html文件中定义一个调用Android功能的方法  
-      >function callAndroid(){    
-        // 由于对象映射，所以调用test对象等于调用Android映射的对象    
-        test.hello("js调用了android中的hello方法");    
-        }    
+              function callAndroid(){    
+                  // 由于对象映射，所以调用test对象等于调用Android映射的对象    
+                  test.hello("js调用了android中的hello方法");    
+              }    
 
       3. 在Android里通过WebView设置Android类与JS代码的映射  
-      >// 设置与Js交互的权限    
-      webSettings.setJavaScriptEnabled(true);    
-      // 通过addJavascriptInterface()将Java对象映射到JS对象    
-      //参数1：Javascript对象名    
-      //参数2：Java对象名    
-      mWebView.addJavascriptInterface(new AndroidtoJs(), "test");//AndroidtoJS类对象映射到js的test对象    
+              // 设置与Js交互的权限    
+              webSettings.setJavaScriptEnabled(true);    
+              // 通过addJavascriptInterface()将Java对象映射到JS对象    
+              //参数1：Javascript对象名    
+              //参数2：Java对象名    
+              mWebView.addJavascriptInterface(new AndroidtoJs(), "test");
 
   2. 通过 WebViewClient 的shouldOverrideUrlLoading ()方法回调拦截 url  
 
       1. 在JS约定所需要的Url协议  
-      >function callAndroid(){    
-      //约定的url协议为：js://webview?arg1=111&arg2=222    
-      document.location = "js://webview?arg1=111&arg2=222";    
-      }    
-      //点击按钮则调用callAndroid（）方法    
-      onclick="callAndroid()"    
+              function callAndroid(){    
+                  //约定的url协议为：js://webview?arg1=111&arg2=222    
+                  document.location = "js://webview?arg1=111&arg2=222";    
+              }    
+              //点击按钮则调用callAndroid（）方法    
+              onclick="callAndroid()"    
 
       2. 在Android通过WebViewClient复写shouldOverrideUrlLoading()
-      >// 设置与Js交互的权限    
-      webSettings.setJavaScriptEnabled(true);    
-      mWebView.setWebViewClient(new WebViewClient() {    
-      @Override    
-      public boolean shouldOverrideUrlLoading(WebView view, String url) {    
-      // 如果url的协议 = 预先约定的 js 协议    
-      // 就解析往下解析参数    
-      Uri uri = Uir.parse(url)    
-      }    
-
+              // 设置与Js交互的权限    
+              webSettings.setJavaScriptEnabled(true);    
+              mWebView.setWebViewClient(new WebViewClient() {    
+                  @Override    
+                  public boolean shouldOverrideUrlLoading(WebView view, String url) {    
+                      // 如果url的协议 = 预先约定的 js 协议    
+                      // 就解析往下解析参数    
+                      Uri uri = Uir.parse(url)    
+                  }    
+             }
   3. 通过 WebChromeClient的onJsAlert()、onJsConfirm()、onJsPrompt（）方法回调拦截JS对话框alert()、confirm()、prompt（） 消息  
       1. 在JS约定所需要的Url协议    
-      >function callAndroid(){    
-      //约定的url协议为：js://webview?arg1=111&arg2=222    
-      document.location = "js://webview?arg1=111&arg2=222"    
-      }    
-      //点击按钮则调用callAndroid（）方法    
-      onclick="callAndroid()"    
+              function callAndroid(){    
+                  //约定的url协议为：js://webview?arg1=111&arg2=222    
+                  document.location = "js://webview?arg1=111&arg2=222"    
+              }    
+              //点击按钮则调用callAndroid（）方法    
+              onclick="callAndroid()"    
 
       2.  WebChromeClient复写onJsPrompt()  
-      >//设置与Js交互的权限    
-      webSettings.setJavaScriptEnabled(true);    
-      mWebView.setWebChromeClient(new WebChromeClient() {    
-      // 拦截输入框(原理同方式2)    
-      @Override    
-      public boolean onJsPrompt(WebView view, String url, String message, String defaultValue, JsPromptResult result) {    
-      // 如果url的协议 = 预先约定的 js 协议    
-      // 就解析往下解析参数    
-      Uri uri = Uir.parse(message)    
-      }    
-      // 拦截JS的警告框    
-      @Override    
-      public boolean onJsAlert(WebView view, String url, String message, JsResult result) {    
-      return super.onJsAlert(view, url, message, result);    
-      }    
-      // 拦截JS的确认框    
-      @Override    
-      public boolean onJsConfirm(WebView view, String url, String message, JsResult result) {    
-      return super.onJsConfirm(view, url, message, result);    
-      }    
-
+              //设置与Js交互的权限    
+              webSettings.setJavaScriptEnabled(true);    
+              mWebView.setWebChromeClient(new WebChromeClient() {    
+                  // 拦截输入框(原理同方式2)    
+                  @Override    
+                  public boolean onJsPrompt(WebView view, String url, String message, String defaultValue, JsPromptResult result) {
+                      // 如果url的协议 = 预先约定的 js 协议    
+                      // 就解析往下解析参数    
+                      Uri uri = Uir.parse(message)    
+                  }    
+                  // 拦截JS的警告框    
+                  @Override    
+                  public boolean onJsAlert(WebView view, String url, String message, JsResult result) {    
+                      return super.onJsAlert(view, url, message, result);    
+                  }    
+                  // 拦截JS的确认框    
+                  @Override    
+                  public boolean onJsConfirm(WebView view, String url, String message, JsResult result) {    
+                      return super.onJsConfirm(view, url, message, result);    
+                  }    
+              }
 ### 3.4 [RecyclerView](https://blog.csdn.net/lmj623565791/article/details/45059587)
 ### 3.5 [ListView详细讲解](https://blog.csdn.net/guolin_blog/article/details/44996879)
 ### 3.6 ImageView
@@ -212,29 +212,29 @@ c/c++开发主要分为连个部分
 #### 4.1.1 MotionEvent
 当用户点击屏幕的时候会触发以下一系列的事件，常见的事件如下：  
 >1.  ACTION_DOWN------手指接触屏幕
->2. ACTION_MOVE------手指在屏幕是移动
->3. ACTION_UP------手指离开屏幕
+>2. ACTION_MOVE-------手指在屏幕是移动
+>3. ACTION_UP------------手指离开屏幕
 
 可以通过以下方法获得当前手指坐标：  
->1. getX()、getY()------获取相对于当前View的X,Y坐标
+>1. getX()、getY()-----------------获取相对于当前View的X,Y坐标
 >2. getRawX()、getRawY()------获取相对于当前屏幕的X,Y坐标
 
 #### 4.1.2 点击事件的传递规则
 1. 当系统产生一个MotionEvent之后，要将其传递给一个具体的View的过程就是事件传递的过程。这个过程需要用到以下三个重要的方法。
->1. public boolean dispatchTouchEvent(MotionEvent me)------事件传递到的View的这个方法一定会调用，返回结果当前时间是否被消耗受2，3结果影响。
->2. public boolean onInterceptTouchEvent(MotionEvent me)------在1内调用，返回是否拦截事件，如果拦截，在当前View的事件序列中该方法不会再调用。
->3. public boolean onTouchEvent(MotionEvent me)------在1中调用，用来处理事件，返回是否消耗当前事件。如果不消耗，当前View将不会再接收该事件序列中的事件。
+>1. public boolean dispatchTouchEvent(MotionEvent me)--------事件传递到的View的这个方法一定会调用，返回结果当前时间是否被消耗受2，3结果影响。
+>2. public boolean onInterceptTouchEvent(MotionEvent me)--------在1内调用，返回是否拦截事件，如果拦截，在当前View的事件序列中该方法不会再调用。
+>3. public boolean onTouchEvent(MotionEvent me)--------在1中调用，用来处理事件，返回是否消耗当前事件。如果不消耗，当前View将不会再接收该事件序列中的事件。
 
 2. 三个方法的关系如以下伪代码  
->public boolean dispatchTouchEvent(MotionEvent me){    
-boolean consume = false;    
-if(onInterceptTouchEvent(me)){    
-consume = onTouchEvent(me);    
-}else{    
-consume = dispatchTouchEvent(me);    
-}    
-return consume;
-}
+        public boolean dispatchTouchEvent(MotionEvent me){    
+            boolean consume = false;    
+            if(onInterceptTouchEvent(me)){    
+                consume = onTouchEvent(me);    
+            }else{    
+                consume = dispatchTouchEvent(me);    
+            }    
+            return consume;
+        }
 
 ***
 ## 5 Android屏幕适配
@@ -251,11 +251,11 @@ return consume;
 ## 6 性能优化相关
 ### 6.1 Android屏幕渲染机制
 ### 6.2 界面卡顿的原因以及解决方法
->一般人眼感觉卡顿的零界点是60FPS,所以为了让人眼感受不到卡顿，Android系统会每隔16ms发出VSYNC信号重新绘制界面。如果由于各种原因导致界面的刷新频率在16ms之后会出现掉帧的现象，这样会降低界面刷新的频率，导致用户感知到卡顿。主要原因有以下：
-  >>1. 过于复杂的界面(使用页面复用include、ViewStub、merge等技术简化布局)
-  >>2. 过度绘制(同上)
-  >>3. UI线程处理过多任务(将复杂任务放入子线程中处理)
-  >>4. 频繁的GC(代码优化)
+一般人眼感觉卡顿的零界点是60FPS,所以为了让人眼感受不到卡顿，Android系统会每隔16ms发出VSYNC信号重新绘制界面。如果由于各种原因导致界面的刷新频率在16ms之后会出现掉帧的现象，这样会降低界面刷新的频率，导致用户感知到卡顿。主要原因有以下：
+1. 过于复杂的界面(使用页面复用include、ViewStub、merge等技术简化布局)
+2. 过度绘制(同上)
+3. UI线程处理过多任务(将复杂任务放入子线程中处理)
+4. 频繁的GC(代码优化)
 
 ***
 ## 7 持久化技术相关
@@ -288,22 +288,131 @@ return consume;
 ***
 ## 9 网络、进程与线程
 ### 9.1 AsyncTask
-### 9.2 [HttpClient与HttpUrlConnection的区别
-](http://blog.csdn.net/guolin_blog/article/details/12452307 )
+### 9.2 [HttpClient与HttpUrlConnection的区别](http://blog.csdn.net/guolin_blog/article/details/12452307 )
 ### 9.3 http与https的区别
 ### 9.4 进程保活（不死进程）
 ### 9.5 进程间通信的方式(IPC)
 ### 9.6 加载大图(ImageLoader)
 ### 9.7 Android消息机制
 Android的消息机制一般指的是Handler的运行机制。Handler的运行机制离不开MessageQueue/Message/Looper/Handler这四个类。  
-1. Message：消息产生分为硬件生成和软件生成。  
-2. MessageQueue：主要功能是向消息池投递消息(MessageQueue.enqueueMessage)和取走消息(MessageQueue.next)。  
-3. Handler：消息辅助类，主要功能向消息池发送各种消息事件(Handler.sendMessage)和处理相应消息事件(Handler.handleMessage)。  
-4. Looper：不断循环执行(Looper.loop)，按分发机制将消息分发给目标处理者。
+>1. Message---------------消息产生分为硬件生成和软件生成。  
+2. MessageQueue--------主要功能是向消息池投递消息(MessageQueue.enqueueMessage)和取走消息(MessageQueue.next)。  
+3. Handler----------------消息辅助类，主要功能向消息池发送各种消息事件(Handler.sendMessage)和处理相应消息事件(Handler.handleMessage)。  
+4. Looper-----------------不断循环执行(Looper.loop)，按分发机制将消息分发给目标处理者。
 
-### Android 线程池的实现原理
-### 讲解一下Context
-### Java虚拟机和Dalvik虚拟机的区别
+具体过程如下：  
+>1. 在一个有Looper的线程中创建Handler之后，Handler就可以和其内部的MessageQueue和Looper一起运转。  
+2. 通过handler的post(new Runnable)或者send(new Message)方法去调用MessageQueue的enqueueMessage方法将消息放入MessageQueue。  
+3. 当Looper发现新消息到来时，就会处理这个消息，就是消息中的Runnable或者handler的handleMessage()会执行。因为Looper是存在于创建Handler的线程中，所以处理消息是在创建Handler的那个线程中。
+
+### 9.8 Android线程
+#### 9.8.1 AsyncTask
+AsyncTask是一个轻量级的异步任务类，他可以在线程池中执行后台任务，并将执行的进度和结果传递给主线程。AsyncTask是一个抽象的泛型类，是对Thread和Handler的轻量级封装。他提供了以下四个核心方法：
+>1. onPreExecute()------------------------------在主线程中执行，在异步任务执行之前，用于准备工作。
+2. doInBackGround(Params...params)------在线程池中执行，params表示异步任务的输入参数。再次方法中可以调用publishProgress()来更新任务进度，次方法会调用onProgressUpdate(),而且次方法需要返回计算结果给onPostExecute()。
+3. onProgressUpdate(progress...values)----在主线程中执行，当后台任务执行进度发生改变时调用。
+4. onPostExecute(Result result)-------------在主线程中执行，异步任务完成之后，result是doInBackground的值。
+
+使用步骤
+>1. 创建一个类MyAsyncTask继承AsyncTask<Void,Integer,Integer>并重写以上三个方法。
+2. 创建实例，并执行  
+MyAsyncTask myAsyncTask = new MyAsyncTask(this);      myAsyncTask.execute(参数);    
+
+#### 9.8.2 HandlerThread
+HandlerThread能够新建拥有Looper的线程。这个Looper能够用来新建其他的Handler。主要用途是用于会长时间在后台运行，并且间隔时间内（或适当情况下）会调用的情况，例子：实现IntentService或实时更新等，以下是使用步骤
+1. 创建HandlerThread实例:  
+        mHandlerThread = new HandlerThread("check-message-coming");    
+        mHandlerThread.start();    
+2. 创建并初始化主线程的Handler:  
+        mainThreadHandler = new Handler();    
+3. 通过HandlerThread创建并初始化子线程的Handler:   
+        subThreadHandler = new Handler(mHandlerThread.getLooper()){  
+            @Override
+            public void handleMessage(Message msg){  
+                //模拟数据更新    
+                mainThreadHandler.post(new Runnable(){    
+                  @Override    
+                  public void run(){     
+                    //更新主线程UI    
+                  }
+          });    
+          if (isUpdateInfo){    
+              //mainThreadHandler继续    
+              subThreadHandler.sendEmptyMessage(MSG_UPDATE_INFO);
+            }
+        }
+4. 在页面开始的时候通知执行，暂停的时候通知停止，销毁的时候释放HandlerThread
+        @Override    
+        protected void onResume()    
+        {    
+            super.onResume();    
+            //开始查询    
+            isUpdateInfo = true;    
+            subThreadHandler.sendEmptyMessage(MSG_UPDATE_INFO);    
+        }    
+        @Override
+        protected void onPause()
+        {
+            super.onPause();
+            //停止查询
+            //以防退出界面后Handler还在执行
+            isUpdateInfo = false;
+            subThreadHandler.removeMessages(MSG_UPDATE_INFO);
+          }
+          @Override
+          protected void onDestroy()
+          {
+              super.onDestroy();
+              //释放资源
+              mHandlerThread.quit();
+          }
+
+
+#### 9.8.3 IntentService
+IntentService，可以看做是Service和HandlerThread的结合体，在完成了使命之后会自动停止，适合需要在工作线程处理UI无关任务的场景。
+      1. IntentService 是继承自 Service 并处理异步请求的一个类，在 IntentService 内有一个工作线程来处理耗时操作。
+      2. 当任务执行完后，IntentService 会自动停止，不需要我们去手动结束。
+      3. 如果启动 IntentService 多次，那么每一个耗时操作会以工作队列的方式在 IntentService 的 onHandleIntent 回调方法中执行，依次去执行，使用串行的方式，执行完自动结束。
+使用步骤
+1. 创建一个Server继承IntentService例如：
+        public class MyIntentService extends IntentService{
+            private static final String TAG = "TAG_MyIntentService";
+            /**
+            * Creates an IntentService.  Invoked by your subclass's constructor.
+            *
+            * @param name Used to name the worker thread, important only for debugging.
+            */
+            public MyIntentService(String name) {
+                super(name);
+            }
+            public MyIntentService(){
+                super(TAG);
+            }
+            @Override
+            protected void onHandleIntent(@Nullable Intent intent) {
+                //执行异步任务
+                String action = intent.getStringExtra("task_action");
+                if (action.equals("com.intent.biao.task1")){
+                    Log.d(TAG,"onHandleIntent com.intent.biao.task1");
+                }
+            }
+
+            @Override
+            public void onDestroy() {
+                super.onDestroy();
+                Log.d(TAG,"MyIntentService destroy");
+            }
+        }
+2. 在manifest中注册MyIntentService
+3. 通过Intent启动MyIntentService
+        Intent intent = new Intent(MainActivity.this,MyIntentService.class);
+        intent.putExtra("task_action","com.intent.biao.task1");
+        startService(intent);
+
+#### 9.8.4
+### 9.10 Android 线程池的实现原理
+### 9.11 讲解一下Context
+### 9.12 Java虚拟机和Dalvik虚拟机的区别
 ***
 ## 10 设计模式
 ***
