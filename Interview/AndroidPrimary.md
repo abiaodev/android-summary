@@ -4,18 +4,18 @@
 系统内置应用与非内置应用，Java开发直接与用户交互。
 ### 1.2 应用框架层(Java API Framework)  
 为开发人员提供开发API，主要包含以下组件  
-1. ActivityManager  
-2. LocationManager  
-3. PackageManager  
-4. NotificationManager  
-5. ResourceManager  
-6. TelephonyManager  
-7. WindowManager  
-8. ContentManager  
-9. ViewSystem  
+* ActivityManager  
+* LocationManager  
+* PackageManager  
+* NotificationManager  
+* ResourceManager  
+* TelephonyManager  
+* WindowManager  
+* ContentManager  
+* ViewSystem  
 
 ### 1.3 系统运行库层(Native)  
-c/c++开发主要分为连个部分
+c/c++开发主要分为两个部分
 1. c/c++程序库
 2. Android运行时库
 
@@ -424,8 +424,46 @@ IntentService，可以看做是Service和HandlerThread的结合体，在完成�
             intent.putExtra("task_action","com.intent.biao.task1");
             startService(intent);
 
-#### 9.8.4
 ### 9.10 Android 线程池的实现原理
+线程池的优点：  
+1. 复用线程池中的线程，俭省了线程的创建和销毁带来的开销。
+2. 有效的控制线程并发数，避免因为线程并发过多导致抢占系统资源而阻塞。
+3. 可以对线程简单的管理，提供定时执行和指定间隔循环执行等。
+
+#### 9.10.1 ThreadPoolExecutor(线程池的真正实现)
+常用构造方法：   
+
+    public ThreadPoolExecutor(int corePoolSize, int maximumPoolSize, long keepAliveTime, TimeUnit unit, BlockingQueue<Runnable> workQueue, ThreadFactory threadFactory)
+1. corePoolSize：核心线程数，默认情况下会一直存活，即使处于闲置状态。如果将ThreadPoolExecutot的allowCoreThreadTimeOut属性设置为true，闲置的核心线程在等待任务到来时会有超时策略，由keepAliveTime控制时间间隔，超过这个时间闲置核心线程将被终止。
+2. maximumPoolSize：允许的最大线程数，超过之后新到来的任务将被阻塞。
+3. keepAliveTime：非核心线程的闲置超时时常，当ThreadPoolExecutot的allowCoreThreadTimeOut属性设置为true时，可以作用于核心线程。
+4. unit：keepAliveTime的时间单位，常用的有TimeUnit.MILLISECONDS(毫秒)、TimeUnit.SECONDS(秒)、TimeUnit.MINUTES(分钟)等。
+5. workQueue：线程池中的任务队列，通过ThreadPoolExecutor的execute()提交的Runnable对象会存储在这个队列中。
+6. threadFactory：线程工厂，为线程池提供创建新线程的功能，他是一个接口，只有一个方法，Thread newThread(Runnable runnable)。
+
+#### 9.10.2 Android中常见的四类线程池
+1. FixedThreadPool  
+线程数固定的线程池，通过Executors.newFixedThreadPool()创建，所有的线程都是核心线程，并且没有超时策略，所以它能够很快的响应外界的请求。当所有的线程都处于活动状态时，新任务会处于等待状态直到有线程空闲出来。以下是其实现：  
+
+        new ThreadPoolExecutor(nThreads, nThreads, 0L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>());
+2. CachedThreadPool  
+线程数量不定，通过Executors.newCachedThreadPool()创建，所有的线程都是非核心线程，最大线程数为Integer.MAX_VALUE，有60秒的延时策略，当有新任务到来时，如果有闲置线程用闲置线程处理，如果没有则创建新线程处理，适合用于大量的耗时少的任务。以下是具体实现：
+
+        new ThreadPoolExecutor(0, Integer.MAX_VALUE, 60L, TimeUnit.SECONDS, new SynchronousQueue<Runnable>());
+
+3. ScheduledThreadPool  
+核心线程数固定，非核心线程数无限制，通过Executors.newScheduledThreadPool()创建，非核心线程闲置立即被回收，主要用于执行定时任务和固定周期的重复任务。以下是具体实现：
+
+        public ScheduledThreadPoolExecutor(int corePoolSize) {
+            super(corePoolSize, Integer.MAX_VALUE,  DEFAULT_KEEPALIVE_MILLIS, MILLISECONDS,new DelayedWorkQueue());
+        }
+4. SingleThreadExecutor
+只有一个核心线程，通过Executors.newSingleThreadExecutor()创建，用于将所有外界任务统一到一个线程来执行。以下是具体实现
+
+        new FinalizableDelegatedExecutorService (
+          new ThreadPoolExecutor(1, 1, 0L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>())
+        );
+        
 ### 9.11 讲解一下Context
 ### 9.12 Java虚拟机和Dalvik虚拟机的区别
 ***
