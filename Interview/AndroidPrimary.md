@@ -21,6 +21,8 @@ c/c++开发主要分为两个部分
 
 ### 1.4 硬件抽象层(HAL)
 ### 1.5 Linux内核
+### 1.6 讲解一下Context
+### 1.7 Java虚拟机和Dalvik虚拟机的区别
 ***
 ## 2  Android中四大组件
 1. Activity  
@@ -86,14 +88,14 @@ c/c++开发主要分为两个部分
 #### 3.1.5 AbsoluteLayout
 #### 3.1.6 GridLayout
 #### 3.1.7 CoordinatorLayout
-### 3.2 [WebView](https://www.jianshu.com/p/fd61e8f4049e)常用方法
+### 3.2 [WebView](https://www.jianshu.com/p/fd61e8f4049e)及其常用方法
   *   onPause() 尽力尝试暂停可以暂停的任何处理，如动画和地理位置。 不会暂停JavaScript。 要全局暂停JavaScript，可使用pauseTimers。
   *   onResume() 恢复onPause() 停掉的操作；
   *   pauseTimers() 暂停所有WebView的布局，解析和JavaScript定时器。 这个是一个全局请求，不仅限于这个WebView。
   *   resumeTimers() 恢复所有WebView的所有布局，解析和JavaScript计时器，将恢复调度所有计时器。
 ***
-### 3.3 [WebView与js交互](https://blog.csdn.net/carson_ho/article/details/64904691/)
-#### 3.3.1 对于Android调用JS代码的方法有2种
+#### 3.2.1 [WebView与js交互](https://blog.csdn.net/carson_ho/article/details/64904691/)
+##### 3.2.1.1 对于Android调用JS代码的方法有2种
 1. 通过WebView的loadUrl() 例如:    
 
         mWebView.loadUrl("javascript:callJS()");
@@ -107,7 +109,7 @@ c/c++开发主要分为两个部分
                 }    
             });    
 
-#### 3.3.2 对于JS调用Android代码的方法有3种
+##### 3.2.1.2 对于JS调用Android代码的方法有3种
   1. 通过WebView的addJavascriptInterface（）进行对象映射  
 
       1. 定义一个与JS对象映射关系的Android类  
@@ -193,13 +195,14 @@ c/c++开发主要分为两个部分
                           return super.onJsConfirm(view, url, message, result);    
                     }    
                 }
+### 3.3 TextView
 ### 3.4 [RecyclerView](https://blog.csdn.net/lmj623565791/article/details/45059587)
-### 3.5 [ListView详细讲解](https://blog.csdn.net/guolin_blog/article/details/44996879)
+### 3.5 [ListView](https://blog.csdn.net/guolin_blog/article/details/44996879)
 ### 3.6 ImageView
 ### 3.7 SurfaceView
 ### 3.8 GLSurfaceView
 ### 3.9 自定义view
-### 3.10 自定义View、ViewGroup注意那些回调？
+#### 3.9.1 自定义View、ViewGroup注意那些回调？
 1. void onFinishInflate();  
     >当系统解析XML中声明的View后回调此方法，调用顺序：内层View->外层View,如果是viewgroup,适合在这里获取子View。  
     如果View没有在XML中声明而是直接在代码中构造的，则不会回调此方法
@@ -209,7 +212,7 @@ c/c++开发主要分为两个部分
     此时View仅仅被添加到View，而没有开始绘制所以同样获取不到宽高和位置
 
 
-### 3.11 Android中动画
+### 3.10 Android中动画
 [1. Frame Animation](https://blog.csdn.net/liuhe688/article/details/6657776)  
 [2. Tween Animation](https://blog.csdn.net/liuhe688/article/details/6660823)  
 [3. Layout Animation](https://blog.csdn.net/guolin_blog/article/details/43536355)  
@@ -296,14 +299,11 @@ c/c++开发主要分为两个部分
 
 
 ***
-## 9 网络、进程与线程
-### 9.1 AsyncTask
-### 9.2 [HttpClient与HttpUrlConnection的区别](http://blog.csdn.net/guolin_blog/article/details/12452307 )
-### 9.3 http与https的区别
-### 9.4 进程保活（不死进程）
-### 9.5 进程间通信的方式(IPC)
-### 9.6 加载大图(ImageLoader)
-### 9.7 Android消息机制
+## 9 进程与线程
+
+### 9.1 进程保活（不死进程）
+### 9.2 进程间通信的方式(IPC)
+### 9.3 Android消息机制
 Android的消息机制一般指的是Handler的运行机制。Handler的运行机制离不开MessageQueue/Message/Looper/Handler这四个类。  
 1. Message---------------消息产生分为硬件生成和软件生成。  
 2. MessageQueue--------主要功能是向消息池投递消息(MessageQueue.enqueueMessage)和取走消息(MessageQueue.next)。  
@@ -315,8 +315,8 @@ Android的消息机制一般指的是Handler的运行机制。Handler的运行�
 2. 通过handler的post(new Runnable)或者send(new Message)方法去调用MessageQueue的enqueueMessage方法将消息放入MessageQueue。  
 3. 当Looper发现新消息到来时，就会处理这个消息，就是消息中的Runnable或者handler的handleMessage()会执行。因为Looper是存在于创建Handler的线程中，所以处理消息是在创建Handler的那个线程中。
 
-### 9.8 Android线程
-#### 9.8.1 AsyncTask
+### 9.4 Android线程
+#### 9.4.1 AsyncTask
 AsyncTask是一个轻量级的异步任务类，他可以在线程池中执行后台任务，并将执行的进度和结果传递给主线程。AsyncTask是一个抽象的泛型类，是对Thread和Handler的轻量级封装。他提供了以下四个核心方法：
 1. onPreExecute()------------------------------在主线程中执行，在异步任务执行之前，用于准备工作。
 2. doInBackGround(Params...params)------在线程池中执行，params表示异步任务的输入参数。再次方法中可以调用publishProgress()来更新任务进度，次方法会调用onProgressUpdate(),而且次方法需要返回计算结果给onPostExecute()。
@@ -328,7 +328,7 @@ AsyncTask是一个轻量级的异步任务类，他可以在线程池中执行�
 2. 创建实例，并执行  
 MyAsyncTask myAsyncTask = new MyAsyncTask(this);      myAsyncTask.execute(参数);    
 
-#### 9.8.2 HandlerThread
+#### 9.4.2 HandlerThread
 HandlerThread能够新建拥有Looper的线程。这个Looper能够用来新建其他的Handler。主要用途是用于会长时间在后台运行，并且间隔时间内（或适当情况下）会调用的情况，例子：实现IntentService或实时更新等，以下是使用步骤
 1. 创建HandlerThread实例:  
 
@@ -381,7 +381,7 @@ HandlerThread能够新建拥有Looper的线程。这个Looper能够用来新建�
                 mHandlerThread.quit();
             }
 
-#### 9.8.3 IntentService
+#### 9.4.3 IntentService
 IntentService，可以看做是Service和HandlerThread的结合体，在完成了使命之后会自动停止，适合需要在工作线程处理UI无关任务的场景。
     1. IntentService 是继承自 Service 并处理异步请求的一个类，在 IntentService 内有一个工作线程来处理耗时操作。
     2. 当任务执行完后，IntentService 会自动停止，不需要我们去手动结束。
@@ -424,13 +424,13 @@ IntentService，可以看做是Service和HandlerThread的结合体，在完成�
             intent.putExtra("task_action","com.intent.biao.task1");
             startService(intent);
 
-### 9.10 Android 线程池的实现原理
+### 9.5 Android 线程池的实现原理
 线程池的优点：  
 1. 复用线程池中的线程，俭省了线程的创建和销毁带来的开销。
 2. 有效的控制线程并发数，避免因为线程并发过多导致抢占系统资源而阻塞。
 3. 可以对线程简单的管理，提供定时执行和指定间隔循环执行等。
 
-#### 9.10.1 ThreadPoolExecutor(线程池的真正实现)
+#### 9.5.1 ThreadPoolExecutor(线程池的真正实现)
 常用构造方法：   
 
     public ThreadPoolExecutor(int corePoolSize, int maximumPoolSize, long keepAliveTime, TimeUnit unit, BlockingQueue<Runnable> workQueue, ThreadFactory threadFactory)
@@ -441,7 +441,7 @@ IntentService，可以看做是Service和HandlerThread的结合体，在完成�
 5. workQueue：线程池中的任务队列，通过ThreadPoolExecutor的execute()提交的Runnable对象会存储在这个队列中。
 6. threadFactory：线程工厂，为线程池提供创建新线程的功能，他是一个接口，只有一个方法，Thread newThread(Runnable runnable)。
 
-#### 9.10.2 Android中常见的四类线程池
+#### 9.5.2 Android中常见的四类线程池
 1. FixedThreadPool  
 线程数固定的线程池，通过Executors.newFixedThreadPool()创建，所有的线程都是核心线程，并且没有超时策略，所以它能够很快的响应外界的请求。当所有的线程都处于活动状态时，新任务会处于等待状态直到有线程空闲出来。以下是其实现：  
 
@@ -463,11 +463,12 @@ IntentService，可以看做是Service和HandlerThread的结合体，在完成�
         new FinalizableDelegatedExecutorService (
           new ThreadPoolExecutor(1, 1, 0L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>())
         );
-        
-### 9.11 讲解一下Context
-### 9.12 Java虚拟机和Dalvik虚拟机的区别
+
 ***
-## 10 设计模式
+## 10 网络
+### 10.1 [HttpClient与HttpUrlConnection的区别](http://blog.csdn.net/guolin_blog/article/details/12452307 )
+### 10.2 http与https的区别
+### 10.3 加载大图(ImageLoader)
 ***
 ## 11 开源框架
 ***
