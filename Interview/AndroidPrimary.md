@@ -93,7 +93,7 @@ c/c++开发主要分为两个部分
   *   onResume() 恢复onPause() 停掉的操作；
   *   pauseTimers() 暂停所有WebView的布局，解析和JavaScript定时器。 这个是一个全局请求，不仅限于这个WebView。
   *   resumeTimers() 恢复所有WebView的所有布局，解析和JavaScript计时器，将恢复调度所有计时器。
-***
+  
 #### 3.2.1 [WebView与js交互](https://blog.csdn.net/carson_ho/article/details/64904691/)
 ##### 3.2.1.1 对于Android调用JS代码的方法有2种
 1. 通过WebView的loadUrl() 例如:    
