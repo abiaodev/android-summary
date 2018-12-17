@@ -20,6 +20,7 @@ c/c++开发主要分为两个部分
 2. Android运行时库
 
 ### 1.4 硬件抽象层(HAL)
+运行在用户空间中，向下屏蔽硬件驱动模块的实现细节，向上提供硬件访问服务。
 ### 1.5 Linux内核
 ### 1.6 讲解一下Context
 ### 1.7 Java虚拟机和Dalvik虚拟机的区别
@@ -93,7 +94,7 @@ c/c++开发主要分为两个部分
   *   onResume() 恢复onPause() 停掉的操作；
   *   pauseTimers() 暂停所有WebView的布局，解析和JavaScript定时器。 这个是一个全局请求，不仅限于这个WebView。
   *   resumeTimers() 恢复所有WebView的所有布局，解析和JavaScript计时器，将恢复调度所有计时器。
-  
+
 #### 3.2.1 [WebView与js交互](https://blog.csdn.net/carson_ho/article/details/64904691/)
 ##### 3.2.1.1 对于Android调用JS代码的方法有2种
 1. 通过WebView的loadUrl() 例如:    
@@ -272,9 +273,54 @@ c/c++开发主要分为两个部分
 
 ***
 ## 7 持久化技术相关
+### 7.1 [SharePreference](https://www.jianshu.com/p/59b266c644f3)
+一个轻量级的存储类，特别适合用于保存软件配置参数。（是用xml文件存放数据，文件存放在/data/data/<package name>/shared_prefs目录下）,使用步骤：
+1. 使用Activity类的getSharedPreferences方法获得SharedPreferences对象；
 
-### 7.1 SharePreference
-### 7.2 SQLite
+        SharedPreferences sharedPreferences = getSharedPreferences(String name, int mode)
+2. 使用SharedPreferences接口的edit获得SharedPreferences.Editor对象；
+
+        Editor editor = sharedPreferences.edit();
+3. 通过SharedPreferences.Editor接口的putXXX方法保存key-value对；
+
+        editor.putString(KEY, VALUES);
+4. 通过过SharedPreferences.Editor接口的commit方法保存key-value对。
+
+        editor.commit();
+5. 通过SharedPreferences对象的getXXX方法获取数据；
+
+        Object values = sharedPreferences.getXXX(KEY, DEFAULT_VALUE);
+
+
+
+### 7.2 [SQLite](https://blog.csdn.net/column/details/android-database-pro.html)
+SQLite传统使用步骤
+1. 新建一个MySQLiteHelper类并让它继承SQLiteOpenHelper
+
+        public class MySQLiteHelper extends SQLiteOpenHelper {
+            public static final String CREATE_NEWS = "create table news ("
+                + "id integer primary key autoincrement, "
+                + "title text, "
+                + "content text, "
+                + "publishdate integer,"
+                + "commentcount integer)";
+            public MySQLiteHelper(Context context, String name, CursorFactory factory,
+        int version) {
+                super(context, name, factory, version);
+            }
+            @Override
+            public void onCreate(SQLiteDatabase db) {
+                db.execSQL(CREATE_NEWS);
+            }
+            @Override
+            public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+            }
+        }
+2. 创建SQLiteDatabase的实例，数据库会自动创建，如下所示
+
+        SQLiteOpenHelper dbHelper = new MySQLiteHelper(this, "demo.db", null, 1);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
 ### 7.3 ContentProvider
 ### 7.4 File
 ### 7.5 网络存储
@@ -468,7 +514,15 @@ IntentService，可以看做是Service和HandlerThread的结合体，在完成�
 ## 10 网络
 ### 10.1 [HttpClient与HttpUrlConnection的区别](http://blog.csdn.net/guolin_blog/article/details/12452307 )
 ### 10.2 http与https的区别
-### 10.3 加载大图(ImageLoader)
+1. https协议需要到ca申请证书，一般免费证书较少，因而需要一定费用。
+2. http是超文本传输协议，信息是明文传输，https则是具有安全性的ssl加密传输协议。
+3. http和https使用的是完全不同的连接方式，用的端口也不一样，前者是80，后者是443。
+4. http的连接很简单，是无状态的；HTTPS协议是由SSL+HTTP协议构建的可进行加密传输、身份认证的网络协议，比http协议安全
+### 10.3 推送原理
+1. 确定使用的传输协议(XMPP)
+2. 开启新线程启动后台任务
+3. 启动一个Service用于通讯
+4. 在service的start(),方法中注册推送消息广播和通信连接的广播，用于监听消息是否到来。
 ***
 ## 11 开源框架
 ***
