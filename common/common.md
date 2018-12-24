@@ -56,11 +56,11 @@
     >调试版本（debug）和发布版本（release）下的 SHA1 值是不同的，发布 apk 时需要根据发布 apk 对应的 keystore 重新配置 Key。(注意：我们这里使用的是调试版本,在开发时请使用调试版本) 。   
 
 1. 使用keytool（Android Studio场景）
-    > 1.1:运行进入控制台（以Window开发环境为例）
-    > 1.2:定位到.android文件夹下，输入cd .android
-    > 1.3:调试版本使用debug.keystore，命令为：keytool -list -v -keystore debug.keystore。  
-          发布版本使用apk对应的keystore，命令为：keytool -list -v -keystore apk 的 keystore。
-    > 1.4:提示输入密钥库密码，调试版本默认密码是: android，发布模式的密码是apk的keystore设置的密码。输入密钥后回车（如果没设置密码，可直接回车），  
+    > 1.1:运行进入控制台（以Window开发环境为例）  
+    > 1.2:定位到.android文件夹下，输入cd .android  
+    > 1.3:调试版本使用debug.keystore，命令为：keytool -list -v -keystore debug.keystore。   
+          发布版本使用apk对应的keystore，命令为：keytool -list -v -keystore apk 的 keystore。  
+    > 1.4:提示输入密钥库密码，调试版本默认密码是: android，发布模式的密码是apk的keystore设置的密码。输入密钥后回车（如果没设置密码，可直接回车），    
     此时可在控制台显示的信息中获取SHA1值.
 2. 在eclipse中，在adt 22中直接查看
-    > 1.1:如果使用adt 22，可以在eclipse中直接查看：Windows -> Preferences -> android -> build。 如下图示：
+    > 1.1:如果使用adt 22，可以在eclipse中直接查看：Windows -> Preferences -> android -> build。 
