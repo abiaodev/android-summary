@@ -52,7 +52,7 @@
       \</android.support.v7.widget.Toolbar>
 ### 1.4 [ToolBar](http://www.jcodecraeer.com/a/anzhuokaifa/androidkaifa/2014/1118/2006.html)
 
-### 1.5 获取SHA1值
+### 1.5 Android Studio获取SHA1值
     > 调试版本（debug）和发布版本（release）下的 SHA1 值是不同的，发布 apk 时需要根据发布 apk 对应的 keystore 重新配置 Key。  
     (注意：我们这里使用的是调试版本,在开发时请使用调试版本) 。   
 
@@ -65,3 +65,15 @@
     此时可在控制台显示的信息中获取SHA1值.
 2. 在eclipse中，在adt 22中直接查看
     > 1.1:如果使用adt 22，可以在eclipse中直接查看：Windows -> Preferences -> android -> build。
+
+### 1.6 Android Studio模板
+1. 方法的注释模板
+  >  *
+  >   * @description:
+  >   * @author Abiao
+  >   * @date $date$ $time$
+  >  $params$
+  >   * @return $returns$
+  >  */
+
+2. 文件注释模板
