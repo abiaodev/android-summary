@@ -1,4 +1,4 @@
-# [Android5(Lollipop)新特性](https://developer.android.google.cn/about/versions/nougat/android-7.0)
+# [Android7(Nougat)新特性](https://developer.android.google.cn/about/versions/nougat/android-7.0)
 ## 1、多窗口支持
 ## 2、通知增强功能
 ## 3、配置文件指导的 JIT/AOT 编译
