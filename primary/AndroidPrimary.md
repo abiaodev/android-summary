@@ -482,31 +482,29 @@ HandlerThread能够新建拥有Looper的线程。这个Looper能够用来新建�
 
 4.  在页面开始的时候通知执行，暂停的时候通知停止，销毁的时候释放HandlerThread
 
-            @Override    
-            protected void onResume()    
-            {    
-                super.onResume();    
-                //开始查询    
-                isUpdateInfo = true;    
-                subThreadHandler.sendEmptyMessage(MSG_UPDATE_INFO);    
-            }    
-            @Override
-            protected void onPause()
-            {
-                super.onPause();
-                //停止查询
-                //以防退出界面后Handler还在执行
-                isUpdateInfo = false;
-                subThreadHandler.removeMessages(MSG_UPDATE_INFO);
-            }
-            @Override
-            protected void onDestroy()
-            {
-                super.onDestroy();
-                //释放资源
-                mHandlerThread.quit();
-            }
-
+    ```  
+    @Override    
+    protected void onResume() {    
+        super.onResume();    
+        //开始查询    
+        isUpdateInfo = true;    
+        subThreadHandler.sendEmptyMessage(MSG_UPDATE_INFO);    
+    }    
+    @Override
+    protected void onPause() {
+        super.onPause();
+        //停止查询
+        //以防退出界面后Handler还在执行
+        isUpdateInfo = false;
+        subThreadHandler.removeMessages(MSG_UPDATE_INFO);
+    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        //释放资源
+        mHandlerThread.quit();
+    }
+    ```
 #### 9.4.3 IntentService
 
 IntentService，可以看做是Service和HandlerThread的结合体，在完成了使命之后会自动停止，适合需要在工作线程处理UI无关任务的场景。
