@@ -41,15 +41,18 @@ c/c++开发主要分为两个部分
 ## 2  Android中四大组件
 
 1.  Activity  
-      Activity 表示具有用户界面的单一屏幕。例如，电子邮件应用可能具有一个显示新电子邮件列表的 Activity、一个用于撰写电子邮件的 Activity 以及一个用于阅读电子邮件的 Activity。 尽管这些 Activity 通过协作在电子邮件应用中形成了一种紧密结合的用户体验，但每一个 Activity 都独立于其他 Activity 而存在。因此，其他应用可以启动其中任何一个 Activity（如果电子邮件应用允许）。例如，相机应用可以启动电子邮件应用内用于撰写新电子邮件的 Activity，以便用户共享图片。
+      >Activity 表示具有用户界面的单一屏幕。例如，电子邮件应用可能具有一个显示新电子邮件列表的 Activity、一个用于撰写电子邮件的 Activity 以及一个用于阅读电子邮件的 Activity。 尽管这些 Activity 通过协作在电子邮件应用中形成了一种紧密结合的用户体验，但每一个 Activity 都独立于其他 Activity 而存在。因此，其他应用可以启动其中任何一个 Activity（如果电子邮件应用允许）。例如，相机应用可以启动电子邮件应用内用于撰写新电子邮件的 Activity，以便用户共享图片。
+
 2.  Service  
-      服务是一种在后台运行的组件，用于执行长时间运行的操作或为远程进程执行作业。 服务不提供用户界面。 例如，当用户位于其他应用中时，服务可能在后台播放音乐或者通过网络获取数据，但不会阻断用户与 Activity 的交互。诸如 Activity 等其他组件可以启动服务，让其运行或与其绑定以便与其进行交互。
+      >服务是一种在后台运行的组件，用于执行长时间运行的操作或为远程进程执行作业。 服务不提供用户界面。 例如，当用户位于其他应用中时，服务可能在后台播放音乐或者通过网络获取数据，但不会阻断用户与 Activity 的交互。诸如 Activity 等其他组件可以启动服务，让其运行或与其绑定以便与其进行交互。
+
 3.  BroadcastReceiver  
-      广播接收器是一种用于响应系统范围广播通知的组件。 许多广播都是由系统发起的 — 例如，通知屏幕已关闭、电池电量不足或已拍摄照片的广播。应用也可以发起广播 — 例如，通知其他应用某些数据已下载至设备，并且可供其使用。  
-    尽管广播接收器不会显示用户界面，但它们可以创建状态栏通知，在发生广播事件时提醒用户。 但广播接收器更常见  
+      >广播接收器是一种用于响应系统范围广播通知的组件。 许多广播都是由系统发起的 — 例如，通知屏幕已关闭、电池电量不足或已拍摄照片的广播。应用也可以发起广播 — 例如，通知其他应用某些数据已下载至设备，并且可供其使用。  
+     尽管广播接收器不会显示用户界面，但它们可以创建状态栏通知，在发生广播事件时提醒用户。 但广播接收器更常见  
     的用途只是作为通向其他组件的“通道”，设计用于执行极少量的工作。 例如，它可能会基于事件发起一项服务来执行某项工作。
+
 4.  ContentProvider  
-      内容提供程序管理一组共享的应用数据。您可以将数据存储在文件系统、SQLite 数据库、网络上或您的应用可以访  
+      >内容提供程序管理一组共享的应用数据。您可以将数据存储在文件系统、SQLite 数据库、网络上或您的应用可以访  
       问的任何其他永久性存储位置。 其他应用可以通过内容提供程序查询数据，甚至修改数据（如果内容提供程序允许）。  
       例如，Android 系统可提供管理用户联系人信息的内容提供程序。 因此，任何具有适当权限的应用都可以查询内容提  
       供程序的某一部分（如 ContactsContract.Data），以读取和写入有关特定人员的信息。
@@ -60,8 +63,7 @@ c/c++开发主要分为两个部分
 ### 2.2 Activity的四种启动模式及其应用场景
 
 #### 2.2.1 任务栈
-
-  程序打开时就创建了一个任务栈, 用于存储当前程序的activity,只有处于栈顶的activity才能与用户进行交互。当把所有activity清除时任务才会销毁。
+  >程序打开时就创建了一个任务栈, 用于存储当前程序的activity,只有处于栈顶的activity才能与用户进行交互。当把所有activity清除时任务才会销毁。
 
 #### 2.2.2 Activity启动模式
 
@@ -127,87 +129,88 @@ c/c++开发主要分为两个部分
 #### 3.1.7 CoordinatorLayout
 
 ### 3.2 [WebView](https://www.jianshu.com/p/fd61e8f4049e)及其常用方法
+#### 3.2.1 常用方法
+ - onPause()尽力尝试暂停可以暂停的任何处理，如动画和地理位置。 不会暂停JavaScript。 要全局暂停JavaScript，可使用pauseTimers。
+- onResume()恢复onPause() 停掉的操作；
+- pauseTimers()暂停所有WebView的布局，解析和JavaScript定时器。 这个是一个全局请求，不仅限于这个WebView。
+- resumeTimers()恢复所有WebView的所有布局，解析和JavaScript计时器，将恢复调度所有计时器。
 
--   onPause() 尽力尝试暂停可以暂停的任何处理，如动画和地理位置。 不会暂停JavaScript。 要全局暂停JavaScript，可使用pauseTimers。
--   onResume() 恢复onPause() 停掉的操作；
--   pauseTimers() 暂停所有WebView的布局，解析和JavaScript定时器。 这个是一个全局请求，不仅限于这个WebView。
--   resumeTimers() 恢复所有WebView的所有布局，解析和JavaScript计时器，将恢复调度所有计时器。
+#### 3.2.2 [WebView与js交互](https://blog.csdn.net/carson_ho/article/details/64904691/)
 
-#### 3.2.1 [WebView与js交互](https://blog.csdn.net/carson_ho/article/details/64904691/)
+##### 3.2.2.1 对于Android调用JS代码的方法有2种
 
-##### 3.2.1.1 对于Android调用JS代码的方法有2种
-
-1.  通过WebView的loadUrl() 例如:    
-
-        mWebView.loadUrl("javascript:callJS()");
-
-2.  通过WebView的evaluateJavascript()  
-
-        mWebView.evaluateJavascript（"javascript:callJS()", new ValueCallback<String>() {    
-              @Override    
-              public void onReceiveValue(String value) {    
-                  //此处为 js 返回的结果    
-              }    
-          });    
+1. 通过WebView的loadUrl() 例如:    
+    ```
+    mWebView.loadUrl("javascript:callJS()");
+    ```
+2. 通过WebView的evaluateJavascript()  
+    ```
+    mWebView.evaluateJavascript（"javascript:callJS()", new ValueCallback<String>() {    
+        @Override    
+        public void onReceiveValue(String value) {    
+          //此处为 js 返回的结果    
+        }    
+    });    
+    ```
 
 ##### 3.2.1.2 对于JS调用Android代码的方法有3种
 
-1.  通过WebView的addJavascriptInterface（）进行对象映射  
+1. 通过WebView的addJavascriptInterface()进行对象映射  
 
-    1.  定义一个与JS对象映射关系的Android类  
+    - 定义一个与JS对象映射关系的Android类
+        ```
+        public class AndroidtoJs extends Object {    
+            // 定义JS需要调用的方法    
+            // 被JS调用的方法必须加入@JavascriptInterface注解    
+            @JavascriptInterface    
+            public void hello(String msg) {    
+                System.out.println("JS调用了Android的hello方法");    
+            }    
+        }    
+        ```
+    - 在html文件中定义一个调用Android功能的方法
+        ```
+        function callAndroid(){    
+            // 由于对象映射，所以调用test对象等于调用Android映射的对象    
+            test.hello("js调用了android中的hello方法");    
+        }    
+        ```
+    - 在Android里通过WebView设置Android类与JS代码的映射  
+        ```
+        // 设置与Js交互的权限    
+        webSettings.setJavaScriptEnabled(true);    
+        // 通过addJavascriptInterface()将Java对象映射到JS对象    
+        //参数1：Javascript对象名    
+        //参数2：Java对象名    
+        mWebView.addJavascriptInterface(new AndroidtoJs(), "test");
+        ```
+2. 通过 WebViewClient 的shouldOverrideUrlLoading ()方法回调拦截 url  
 
-            public class AndroidtoJs extends Object {    
-                // 定义JS需要调用的方法    
-                // 被JS调用的方法必须加入@JavascriptInterface注解    
-                @JavascriptInterface    
-                public void hello(String msg) {    
-                    System.out.println("JS调用了Android的hello方法");    
-                }    
+    - 在JS约定所需要的Url协议  
+        ```
+        function callAndroid(){    
+            //约定的url协议为：js://webview?arg1=111&arg2=222    
+            document.location = "js://webview?arg1=111&arg2=222";    
+        }    
+        //点击按钮则调用callAndroid()方法    
+        onclick="callAndroid()"    
+        ```
+    - 在Android通过WebViewClient复写shouldOverrideUrlLoading()
+        ```
+        // 设置与Js交互的权限    
+        webSettings.setJavaScriptEnabled(true);    
+        mWebView.setWebViewClient(new WebViewClient() {    
+            @Override    
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {    
+                // 如果url的协议 = 预先约定的 js 协议    
+                // 就解析往下解析参数    
+                Uri uri = Uir.parse(url)    
             }    
 
-    2.  在html文件中定义一个调用Android功能的方法  
-
-            function callAndroid(){    
-                // 由于对象映射，所以调用test对象等于调用Android映射的对象    
-                test.hello("js调用了android中的hello方法");    
-            }    
-
-    3.  在Android里通过WebView设置Android类与JS代码的映射  
-
-            // 设置与Js交互的权限    
-            webSettings.setJavaScriptEnabled(true);    
-            // 通过addJavascriptInterface()将Java对象映射到JS对象    
-            //参数1：Javascript对象名    
-            //参数2：Java对象名    
-            mWebView.addJavascriptInterface(new AndroidtoJs(), "test");
-
-2.  通过 WebViewClient 的shouldOverrideUrlLoading ()方法回调拦截 url  
-
-    1.  在JS约定所需要的Url协议  
-
-            function callAndroid(){    
-                //约定的url协议为：js://webview?arg1=111&arg2=222    
-                document.location = "js://webview?arg1=111&arg2=222";    
-            }    
-            //点击按钮则调用callAndroid（）方法    
-            onclick="callAndroid()"    
-
-    2.  在Android通过WebViewClient复写shouldOverrideUrlLoading()
-
-            // 设置与Js交互的权限    
-            webSettings.setJavaScriptEnabled(true);    
-            mWebView.setWebViewClient(new WebViewClient() {    
-                @Override    
-                public boolean shouldOverrideUrlLoading(WebView view, String url) {    
-                    // 如果url的协议 = 预先约定的 js 协议    
-                    // 就解析往下解析参数    
-                    Uri uri = Uir.parse(url)    
-                }    
-
-           }
-
-3.  通过 WebChromeClient的onJsAlert()、onJsConfirm()、onJsPrompt（）方法回调拦截JS对话框alert()、confirm()、prompt（） 消息  
-          1. 在JS约定所需要的Url协议    
+       }
+       ```
+3. 通过 WebChromeClient的onJsAlert()、onJsConfirm()、onJsPrompt（）方法回调拦截JS对话框alert()、confirm()、prompt（） 消息  
+    - 在JS约定所需要的Url协议    
 
                   function callAndroid(){    
                       //约定的url协议为：js://webview?arg1=111&arg2=222    
@@ -454,32 +457,33 @@ MyAsyncTask myAsyncTask = new MyAsyncTask(this);      myAsyncTask.execute(参数
 
 HandlerThread能够新建拥有Looper的线程。这个Looper能够用来新建其他的Handler。主要用途是用于会长时间在后台运行，并且间隔时间内（或适当情况下）会调用的情况，例子：实现IntentService或实时更新等，以下是使用步骤
 1. 创建HandlerThread实例:  
-
-            mHandlerThread = new HandlerThread("check-message-coming");    
-            mHandlerThread.start();    
-
+      ```
+      mHandlerThread = new HandlerThread("check-message-coming");    
+      mHandlerThread.start();    
+      ```
 2.  创建并初始化主线程的Handler:  
-
-            mainThreadHandler = new Handler();    
-
+      ```
+      mainThreadHandler = new Handler();    
+      ```
 3.  通过HandlerThread创建并初始化子线程的Handler:   
 
-            subThreadHandler = new Handler(mHandlerThread.getLooper()){  
-                @Override
-                public void handleMessage(Message msg){  
-                    //模拟数据更新    
-                    mainThreadHandler.post(new Runnable(){    
-                      @Override    
-                      public void run(){     
-                        //更新主线程UI    
-                      }
-              });    
-              if (isUpdateInfo){    
-                  //mainThreadHandler继续    
-                  subThreadHandler.sendEmptyMessage(MSG_UPDATE_INFO);
+      ```
+      subThreadHandler = new Handler(mHandlerThread.getLooper()){  
+          @Override
+          public void handleMessage(Message msg){  
+              //模拟数据更新    
+              mainThreadHandler.post(new Runnable(){    
+                @Override    
+                public void run(){     
+                  //更新主线程UI    
                 }
-            }
-
+        });    
+        if (isUpdateInfo){    
+            //mainThreadHandler继续    
+            subThreadHandler.sendEmptyMessage(MSG_UPDATE_INFO);
+          }
+      }
+      ```
 4.  在页面开始的时候通知执行，暂停的时候通知停止，销毁的时候释放HandlerThread
 
     ```  
