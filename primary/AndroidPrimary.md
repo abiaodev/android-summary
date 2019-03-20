@@ -1,4 +1,4 @@
-# Android基础面试题
+# Android基础
 
 ## Android系统的架构
 
@@ -675,16 +675,18 @@ c/c++开发主要分为两个部分
 
 * * *
 
-## 10 网络
+## 网络
+### HTTP与HTTPS的区别
 
-### 10.1 [HttpClient与HttpUrlConnection的区别](http://blog.csdn.net/guolin_blog/article/details/12452307)
+1.  HTTPS协议需要到ca申请证书，一般免费证书较少，因而需要一定费用。
 
-### 10.2 http与https的区别
+2.  HTTP是超文本传输协议，信息是明文传输，HTTPS则是具有安全性的ssl加密传输协议。
 
-1.  https协议需要到ca申请证书，一般免费证书较少，因而需要一定费用。
+3.  HTTP和HTTPS使用的是完全不同的连接方式，用的端口也不一样，前者是80，后者是443。
 
-2.  http是超文本传输协议，信息是明文传输，https则是具有安全性的ssl加密传输协议。
+4.  HTTP的连接很简单，是无状态的；HTTPS协议是由SSL+HTTP协议构建的可进行加密传输、身份认证的网络协议，比HTTP协议安全
 
-3.  http和https使用的是完全不同的连接方式，用的端口也不一样，前者是80，后者是443。
-
-4.  http的连接很简单，是无状态的；HTTPS协议是由SSL+HTTP协议构建的可进行加密传输、身份认证的网络协议，比http协议安全
+### [HttpClient与HttpUrlConnection的区别](http://blog.csdn.net/guolin_blog/article/details/12452307)
+### Volley
+### OkHttp3
+### Retrofit 2.0
