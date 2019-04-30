@@ -1,5 +1,5 @@
 # Android问答
-## [Gradle各个依赖描述](https://blog.csdn.net/yuzhiqiang_1993/article/details/78366985)
+## 1、[Gradle各个依赖描述](https://blog.csdn.net/yuzhiqiang_1993/article/details/78366985)
 - compile--->implementation,api
   > 这种是我们最常用的方式，使用该方式依赖的库将会参与编译和打包。
 
@@ -25,7 +25,7 @@
   > Release compile 仅仅针对Release 模式的编译和最终的Release apk打包。
 
 
-## onActivityresult不执行
+## 2、onActivityresult不执行
 - SingleTask
   > 原因：启动模式(launchMode)为SingleTask时，系统将在 startActivityForResult() 后直接调用 onActivityResult()。  
   > 解决：将启动模式切换为singleTop或standard
@@ -34,3 +34,12 @@
   > 原因：启动Actity的时候，不是用Fragment启动  
   > 解决：使用fragment.startActivityForResult()或者在与Fragment绑定的FragmentActivity中重写onActivityResult方法。返回的result先传至Fragment的FragmentActiivity。这个FragementActivity的onActivityResult函数必须调用super(requestCode,resultCode, data); 。super.onActiivtyResult会将未被处理的result消息继续传给其fragement的onActiivtyResult。
 如果这种方法不管用用以下这种：解决方法就是在Fragment中直接调用startActivityForResult()方法
+
+## 3、[Android Studio突然导包无效 import无效 调用无效](https://blog.csdn.net/Mr_ChenXu/article/details/77987404)
+- 步骤
+  >Android studio file--->Invalidate Caches/Restart
+
+## 4、怎么在app模块中引入其他模块的so文件，比如我的引用中有两个模块app和lib，我想要将百度地图的so文件提出来放到lib模块中，怎么在app模块引用到?
+
+
+##
