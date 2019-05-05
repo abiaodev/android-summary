@@ -9,7 +9,7 @@
 
 ## 自我描述
 
-我是一名热爱**开源**的安卓开发者，喜欢阅读优秀开源项目源码，学习其中优秀的编码规范和设计模式用来提升自己能力。同时我也喜欢分享总结开发和设计知识，一开始是在自己的笔记本上记录，后因为喜欢开源且方便所以我将自己的总结都开始迁移到自己的Github上[AndroidSummary](https://github.com/GitABiao/AndroidSummary)。为了开发便利，我也开始在做[AndroidUtilCode](https://github.com/Blankj/AndroidUtilCode)类似的工作，创建属于自己的Android开发利器。
+我是一名热爱**开源**的安卓开发者，喜欢阅读优秀开源项目源码(使用Source Insight)，学习其中优秀的设计模式以及编码规范以此来提升自己在编码上的不足。同时我也喜欢总结开发过程中遇到的各种问题和新知识，一开始是在自己的笔记本上记录，后因为喜欢开源且方便所以我将自己的总结都开始迁移到自己的Github上[AndroidSummary](https://github.com/GitABiao/AndroidSummary)。同时为了提高开发效率，我现在开始将自己项目中和业务无关的一些工具类提炼出来，用于创建属于自己的Android开发利器。
 
 
 ## 工作经验
@@ -22,17 +22,17 @@
 
 * 负责慧工作App的项目架构，由于是个小型项目我采用的是纯MVP模式。
 
-* 负责项目相关开源框架选取，比如网络框架使用Retrofit2 + Okhttp3 + RxLifecycle，日历使用calendarview，事件绑定Butterknife,智能下拉刷新和上拉加载使用SmartRefresh等等。
+* 负责项目相关开源框架选取，比如网络框架使用Retrofit2 + Okhttp3 + RxLifecycle，日历使用[CalendarView](https://github.com/huanghaibin-dev/CalendarView)，事件绑定[Butterknife8](https://github.com/JakeWharton/butterknife),智能下拉刷新和上拉加载使用[SmartRefreshLayout](https://github.com/scwang90/SmartRefreshLayout)等等。
 
-* 负责对RxHttpUtil网络开源框架的引入和简单封装以及和后台服务对接。
+* 负责对[RxHttpUtil](https://github.com/lygttpod/RxHttpUtils)网络开源框架的引入和简单封装以及和后台服务对接。
 
-* 负责慧工作WebView的对接和实现，使用开源框架JsBridge。
+* 负责慧工作WebView的对接和实现，使用[TBS](https://x5.tencent.com/tbs/index.html)内核并用开源框架[JsBridge](https://github.com/lzyzsd/JsBridge)与其进行交互。
 
-* 收集和整理Android常用工具类便于高效开发。
+* 编写、收集和整理Android常用工具类便于高效开发。
 
 * 使用Postman规范Api接口对接。
 
-*  优化项目，包括但不限于网络优化、包体积优化、代码优化。
+*  优化项目，包括但不限于网络优化、包体积优化、代码优化、性能优化。
 
 
 ### **前端开发工程师** 贵州久联车业服务有限公司
@@ -80,13 +80,14 @@
 - [RxAndroid](https://github.com/ReactiveX/RxAndroid)^†^
 - [EventBus](https://github.com/greenrobot/EventBus)^†^
 - [Retrofit](https://github.com/square/retrofit)^†^
-
-- [fastjson
+- [Fastjson
 ](https://github.com/alibaba/fastjson)^†^
+- [Gson](https://github.com/google/gson)^†^
+
 - [Glide](https://github.com/bumptech/glide)^†^
 - [Dagger2](https://github.com/google/dagger)
-- [Gson](https://github.com/google/gson) [SmartRefreshLayout](https://github.com/scwang90/SmartRefreshLayout)
-
+- [SmartRefreshLayout](https://github.com/scwang90/SmartRefreshLayout)^†^
+- [BaseRecyclerViewAdapterHelper](https://github.com/CymChad/BaseRecyclerViewAdapterHelper)^†^
 ### 工具软件
 
 - [Android Studio](https://developer.android.com/studio/index.html?hl=zh-cn)^†^
@@ -101,7 +102,7 @@
 
 ## 教育经历
 
-*2013 - 2017* [杭州电子科技大学](http://www.hdu.edu.cn/) 计算机学院-物联网工程
+*2013 - 2017* [杭州电子科技大学](http://www.hdu.edu.cn/) 计算机科学与技术类-物联网工程专业
 
 
 ## 兴趣爱好
