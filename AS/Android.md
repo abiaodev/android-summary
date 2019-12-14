@@ -42,4 +42,4 @@
 ## 4、怎么在app模块中引入其他模块的so文件，比如我的引用中有两个模块app和lib，我想要将百度地图的so文件提出来放到lib模块中，怎么在app模块引用到?
 
 
-##
+## 5、No toolchains found in the NDK toolchains folder for ABI with prefix: mips64el-linux-android
