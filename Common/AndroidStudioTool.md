@@ -1,4 +1,4 @@
-# 1、 高效插件
+# 高效插件
 ## 1、GsonFormat
   Quickly to convert a JSON string to an InnerClassEntity class ..
 ## 2、Android ButterKnife Zelezny
@@ -18,11 +18,14 @@
 ## 7、CodeGlance
   Embeds a code minimap similar to the one found in Sublime into the editor pane. Works with both light and dark themes using your customized colors for syntax highlighting.
 
-## 8、 Material Theme UI
+## 8、Material Theme UI
   Material Design Experience for JetBrains IDEs
 
-## 9、 DTO generator
+## 9、DTO generator
   Data Transfer Object(DTO) generator that generates Java classes from the given feed.
 
-## 10、 .​ignore
+## 10、.​ignore
   ignore is a plugin for .gitignore (Git), .hgignore (Mercurial), .npmignore (NPM), .dockerignore (Docker), .chefignore (Chef), .cvsignore (CVS), .bzrignore (Bazaar), .boringignore (Darcs), .mtn-ignore (Monotone), ignore-glob (Fossil), .jshintignore (JSHint), .tfignore (Team Foundation), .p4ignore (Perforce), .prettierignore (Prettier), .flooignore (Floobits), .eslintignore (ESLint), .cfignore (Cloud Foundry), .jpmignore (Jetpack), .stylelintignore (StyleLint), .stylintignore (Stylint), .swagger-codegen-ignore (Swagger Codegen), .helmignore (Kubernetes Helm), .upignore (Up), .prettierignore (Prettier), .ebignore (ElasticBeanstalk), .gcloudignore (Google Cloud) files in your project.
+
+## 11、PlantUML integration
+  PlantUML diagramming tool integration
