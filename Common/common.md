@@ -91,4 +91,12 @@
      * @return $returns$
     */
     ```
+
 2. 文件注释模板
+  ```
+  /**
+   * @author ${USER}_Abiao
+   * @date ${DATE} ${TIME}
+   * @description:
+   */
+  ```
