@@ -18,6 +18,7 @@ Android原生组件主要包含原生库和支持库。
 #### 1.6、Space
 #### 1.7、SurfaceView
 #### 1.7.1、GLSurfaceView
+
 #### 1.7.2、VideoView
 #### 1.8、TextView(详解另寻)
 #### 1.9、TextureView

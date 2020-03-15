@@ -14,6 +14,7 @@
       tools:replace="android:theme"//添加这一行
       />
       ```
+
 ## [自定义RadioButton](https://blog.csdn.net/coder_pig/article/details/47035625)
 1. 创建drawable文件例如：radio_button_1.xml，图片大小不好控制所以我使用drawable控制图片大小防止失真。
       ```
@@ -38,6 +39,7 @@
           android:paddingLeft="8dp"<!--设置文字和button之间的距离--\>    
           android:button="@drawable/radio_button_1"/>
       ```
+
 ## [ToolBar](http://www.jcodecraeer.com/a/anzhuokaifa/androidkaifa/2014/1118/2006.html)
 1. 左侧/右侧有一段空白无法使用
       ```
@@ -100,3 +102,5 @@
    * @description:
    */
   ```
+
+##
