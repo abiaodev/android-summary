@@ -35,7 +35,7 @@
   > 解决：使用fragment.startActivityForResult()或者在与Fragment绑定的FragmentActivity中重写onActivityResult方法。返回的result先传至Fragment的FragmentActiivity。这个FragementActivity的onActivityResult函数必须调用super(requestCode,resultCode, data); 。super.onActiivtyResult会将未被处理的result消息继续传给其fragement的onActiivtyResult。
 如果这种方法不管用用以下这种：解决方法就是在Fragment中直接调用startActivityForResult()方法
 
-## 3、[Android Studio突然导包无效 import无效 调用无效但是可以正常运行](https://blog.csdn.net/Mr_ChenXu/article/details/77987404)
+## 3、[Android Studio突然导包无效 import无效 调用无效](https://blog.csdn.net/Mr_ChenXu/article/details/77987404)
 - 步骤
   >Android studio file--->Invalidate Caches/Restart
 
@@ -43,3 +43,5 @@
 
 
 ## 5、No toolchains found in the NDK toolchains folder for ABI with prefix: mips64el-linux-android
+
+## 6、
