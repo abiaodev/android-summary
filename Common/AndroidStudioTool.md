@@ -29,3 +29,6 @@
 
 ## 11、PlantUML integration
   PlantUML diagramming tool integration
+
+## 12、[Android Size Analyzer](https://github.com/android/size-analyzer)
+  Gives concrete suggestions for reducing the size of your application
