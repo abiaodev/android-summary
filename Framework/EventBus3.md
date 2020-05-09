@@ -47,18 +47,44 @@ public void onStop() {
 
 ### 4、发送事件
 ```
+//发送事件
 EventBus.getDefault().post(new MessageEvent("Hello everyone!"));
+
+//发送粘性事件
+EventBus.getDefault().postSticky(new MessageEvent("Hello everyone!"));
+//移除粘性事件
+EventBus.removeStickyEvent(MessageEvent.class);
+
 ```
 ---
 ## 源码分析
 分析源码之前，我想先抛出几个问题，然后根据这几个问题对源码进行分析
-* EventBus的具体工作流程是怎样的
-* EventBus是怎么处理线程的切换的
-* EventBus是怎么执行订阅的方法的
+* 具体工作流程是怎样的
+* 怎么处理线程的切换的
+* 是怎么执行订阅的方法的
+* 粘性事件的具体流程以及实现
 
 ### EventBus的具体工作流程
+#### 获取EventBus单例类
+这里使用了一个双重检验的单例模式
+```
+/** Convenience singleton for apps using a process-wide EventBus instance. */
+public static EventBus getDefault() {
+    EventBus instance = defaultInstance;
+    if (instance == null) {
+        synchronized (EventBus.class) {
+            instance = EventBus.defaultInstance;
+            if (instance == null) {
+                instance = EventBus.defaultInstance = new EventBus();
+            }
+        }
+    }
+    return instance;
+}
+```
+
 #### EventBus注册流程
-源码如下
+首先我们先看一下源码
 ```
 public void register(Object subscriber) {
         Class<?> subscriberClass = subscriber.getClass();
@@ -71,6 +97,7 @@ public void register(Object subscriber) {
             }
         }
     }
+
 private void subscribe(Object subscriber, SubscriberMethod subscriberMethod) {
     Class<?> eventType = subscriberMethod.eventType;
     //激活方法
@@ -131,8 +158,9 @@ private void subscribe(Object subscriber, SubscriberMethod subscriberMethod) {
 1. 通过**SubscriberMethodFinder#findSubscriberMethods**找到当前类声明的订阅方法。
 2. 然后通过**Subscription**激活并使用全局变量**EventBus#subscriptionsByEventType**缓存,订阅方法准备调用。如果是粘性（sticky）事件，则直接触发checkPostStickyEventToSubscription。
 3. 将事件保存到**EventBus#typesBySubscriber**缓存
+
 #### EventBus注销流程
-源码如下：
+老规矩源码如下
 ```
 // Unregisters the given subscriber from all event classes.
 public synchronized void unregister(Object subscriber) {
@@ -170,11 +198,11 @@ private void unsubscribeByEventType(Object subscriber, Class<?> eventType) {
 ```
 流程描述：
 1. 获取当前类的已经注册且状态是激活的事件EventBus#typesBySubscriber
-2. 将获取到的事件冻结
-
+2. 将获取到的事件冻结并移除
 
 #### 发送事件流程
-源码
+1. 发送一般事件的源码如下
+
 ```
 public void post(Object event) {
    PostingThreadState postingState = currentPostingThreadState.get();
@@ -197,7 +225,6 @@ public void post(Object event) {
        }
    }
 }
-
 private void postSingleEvent(Object event, PostingThreadState postingState) throws Error {
     Class<?> eventClass = event.getClass();
     boolean subscriptionFound = false;
@@ -221,7 +248,6 @@ private void postSingleEvent(Object event, PostingThreadState postingState) thro
         }
     }
 }
-
 private boolean postSingleEventForEventType(Object event, PostingThreadState postingState, Class<?> eventClass) {
     CopyOnWriteArrayList<Subscription> subscriptions;
     synchronized (this) {
@@ -284,3 +310,133 @@ private void postToSubscription(Subscription subscription, Object event, boolean
 }
 
 ```
+上面是发送基本事件的流程，首先通过**PostingThreadState**保存event，通过while循环发送事件直到发送完，发送的event包含其父类和实现的接口（lookupAllEventTypes获取），通过Subscription将事件激活并开始发送。通过调用postToSubscription方法来实现。我们可以看到postToSubscription方法里包含不同线程下的invokeSubscriber调用。线程切换我们暂时先不用管，先分析一一下invokeSubscriber的具体实现。
+```
+void invokeSubscriber(Subscription subscription, Object event) {
+      try {
+          //反射执行
+          subscription.subscriberMethod.method.invoke(subscription.subscriber, event);
+      } catch (InvocationTargetException e) {
+          handleSubscriberException(subscription, event, e.getCause());
+      } catch (IllegalAccessException e) {
+          throw new IllegalStateException("Unexpected exception", e);
+      }
+  }
+```
+我们可以看到invokeSubscriber具体实通过反射来实现方法的调用的。subscription.subscriberMethod.method在register调用的时候就创建了。
+
+#### EventBus线程切换
+我们注意到涉及到线程切换的地方在postToSubscription方法里，这里有mainThreadPoster、backgroundPoster和asyncPoster三个Poster线程切换就是通过这三个Poster来实现的。
+```
+mainThreadPoster = mainThreadSupport != null ? mainThreadSupport.createPoster(this) : null;
+backgroundPoster = new BackgroundPoster(this);
+asyncPoster = new AsyncPoster(this);
+
+//AndroidHandlerMainThreadSupport
+@Override
+public Poster createPoster(EventBus eventBus) {
+  return new HandlerPoster(eventBus, looper, 10);
+}
+
+//HandlerPoster
+public void enqueue(Subscription subscription, Object event) {
+      PendingPost pendingPost = PendingPost.obtainPendingPost(subscription, event);
+      synchronized (this) {
+          queue.enqueue(pendingPost);
+          if (!handlerActive) {
+              handlerActive = true;
+              if (!sendMessage(obtainMessage())) {
+                  throw new EventBusException("Could not send handler message");
+              }
+        }
+    }
+}
+
+@Override
+public void handleMessage(Message msg) {
+  boolean rescheduled = false;
+  try {
+      long started = SystemClock.uptimeMillis();
+      while (true) {
+          PendingPost pendingPost = queue.poll();
+          if (pendingPost == null) {
+              synchronized (this) {
+                  // Check again, this time in synchronized
+                  pendingPost = queue.poll();
+                  if (pendingPost == null) {
+                      handlerActive = false;
+                      return;
+                  }
+              }
+          }
+          eventBus.invokeSubscriber(pendingPost);
+          long timeInMethod = SystemClock.uptimeMillis() - started;
+          if (timeInMethod >= maxMillisInsideHandleMessage) {
+              if (!sendMessage(obtainMessage())) {
+                  throw new EventBusException("Could not send handler message");
+              }
+              rescheduled = true;
+              return;
+          }
+      }
+  } finally {
+      handlerActive = rescheduled;
+  }
+}
+
+//BackgroundPoster
+public void enqueue(Subscription subscription, Object event) {
+        PendingPost pendingPost = PendingPost.obtainPendingPost(subscription, event);
+        synchronized (this) {
+            queue.enqueue(pendingPost);
+            if (!executorRunning) {
+                executorRunning = true;
+                eventBus.getExecutorService().execute(this);
+            }
+        }
+    }
+
+    @Override
+    public void run() {
+        try {
+            try {
+                while (true) {
+                    PendingPost pendingPost = queue.poll(1000);
+                    if (pendingPost == null) {
+                        synchronized (this) {
+                            // Check again, this time in synchronized
+                            pendingPost = queue.poll();
+                            if (pendingPost == null) {
+                                executorRunning = false;
+                                return;
+                            }
+                        }
+                    }
+                    eventBus.invokeSubscriber(pendingPost);
+                }
+            } catch (InterruptedException e) {
+                eventBus.getLogger().log(Level.WARNING, Thread.currentThread().getName() + " was interruppted", e);
+            }
+        } finally {
+            executorRunning = false;
+        }
+    }
+
+//AsyncPoster
+public void enqueue(Subscription subscription, Object event) {
+        PendingPost pendingPost = PendingPost.obtainPendingPost(subscription, event);
+        queue.enqueue(pendingPost);
+        eventBus.getExecutorService().execute(this);
+    }
+
+@Override
+public void run() {
+    PendingPost pendingPost = queue.poll();
+    if(pendingPost == null) {
+        throw new IllegalStateException("No pending post available");
+    }
+    eventBus.invokeSubscriber(pendingPost);
+  }
+
+```
+我们可以看到mainThreadPoster是由HandlerPoster实现的通过handler实现在主线程接收event，最终还是调用了  eventBus.invokeSubscriber(pendingPost)方法。而BackgroundPoster和AsyncPoster则是通过  eventBus.getExecutorService().execute(this)线程池来调用的。
