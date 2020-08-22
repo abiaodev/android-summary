@@ -44,4 +44,8 @@
 
 ## 5、No toolchains found in the NDK toolchains folder for ABI with prefix: mips64el-linux-android
 
-## 6、
+## 6、Android Studio 4以上xml中格式化代码组件重排序
+1. 进入设置页(Settings)
+2. Editor-->Code Style-->XML
+3. 点击右上角set from 选择Android
+4. Apply
