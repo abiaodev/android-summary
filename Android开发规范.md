@@ -1,5 +1,5 @@
 # 39医生互联网医院Android开发手册
-为提高开发质量，规范团队开发，增强代码可读性，降低项目维护成本。特制定以下开发规范用于团队开发。
+为提高开发质量，规范团队开发，增强代码可读性，降低项目维护成本,特制定以下开发规范用于团队开发。
 ##  一、	Android Studio（以下简称AS）规范
 
 1. AS版本最新稳定版本。
@@ -23,6 +23,7 @@
 
 ### 1 资源文件命名与使用
 1. layout文件命名
+
 |       Layout         |规则|
 |:------------------:|-----------------|
 |Activity         | module_act_开头 |
@@ -34,6 +35,7 @@
 |GridView         | module_grid_item_开头 |
 
 2. id资源命名以所在的layout开头，功能居中，View的缩写为后缀（例如act_doctor_details_consult_btn）
+
 |       控件         |缩写|
 |:------------------:|-----------------|
 |LinearLayout         | ll |
@@ -57,9 +59,22 @@
 ```
 
 4. anim 资源名称以小写单词+下划线的方式命名，采用以下规则：
+
+|       名称         |说明|
+|:------------------:|-----------------|
+|fade_in         | 淡入 |
+|fade_out         | 淡出 |
+|push_down_in         | 从下方推入 |
+|push_down_out         | 从下方推出 |
+|push_left         | 推向左方 |
+|slide_in_from_top         | 从头部滑动进入 |
+|zoom_enter         | 变形进入 |
+|slide_in         | 滑动进入 |
+|shrink_to_middle         | 中间缩小 |
 ```
 模块名_逻辑名称_[方向|序号]
 ```
+
 
 5. color 资源使用#AARRGGBB 格式，写入 module_colors.xml 文件中，命
 名格式采用以下规则：
@@ -74,6 +89,9 @@
 ```
 
 ### 组件名
+所有的Activity直接或者间接必须继承自BaseActivity
+所有的Fragment直接或者间接必须继承自BaseFragment
+
 |       类	|描述	|例如|
 |:------------------:|-----------------|---------:|
 |Activity         | Activity后缀 | LoginActivity|
@@ -82,6 +100,21 @@
 |工具类         | Utils/Manager/Helper为后缀 | LogUtils/AppAlarmManager/AudioHelper|
 |数据库类         | DBHelper后缀 | NewsDBHelper|
 |自定义的共享基础类         | Base为前缀 | BaseFragemnt/BaseActivity/BaseDialog|
+### 包名
+全部使用小写字母，不能使用下划线，采用反域名命名规则。
+```
+一级包名为顶级域名
+com、edu、gov、net、org等
+二级包名为公司名称
+tencent 等
+三级包名为应用名相关
+weichat 等
+之后的就是功能相关
+activits 等
+例如
+com.tencent.weichat.activits
+```
+
 
 ### Java编码规则（更多参考**阿里巴巴 Java 开发手册**）
 1. 代码中的命名严禁使用拼音与英文混合的方式，更不允许直接使用中文的方式。
@@ -97,3 +130,39 @@ PO / UID 等。
 与接口方法相关，并且是整个应用的基础常量
 7. 不允许任何魔法值（即未经预先定义的常量） 直接出现在代码中
 8. 单个方法的总行数不超过 80 行
+
+### 代码样式规范
+
+1. 字符串常量命名
+
+|       类	|字段前缀|
+|:------------------:|-----------------|
+|SharedPreferences         | SP_ |
+|Bundle         | BUNDULE_ |
+|Fragment Arguments         | ARGUMENT_或者KEY_TO_ |
+|Intent Extra         | EXTRA_或KEY_TO_ |
+|Intent Action         | ACTION_ |
+
+2. Activit和Fragment传参
+
+```
+Activity
+//可以在当前activity当中使用Android Studio 的Live Templates 功能**starter**快速生成。
+private static String EXTRA_USER = "_EXTRA_USER_";
+public static void start(Context context, User user) {
+      Intent intent = new Intent(context, MainActivity.class);
+      intent.putParcelableExtra(EXTRA_USER, user);
+      context.startActivity(starter);
+}
+
+Fragment
+//可以在当前activity当中使用Android Studio 的Live Templates 功能**newInstance**快速生成。
+private static String ARGUMENT_USER = "_ARGUMENT_USER_";
+public static MainFragment newInstance(User user) {
+      Bundle args = new Bundle();
+      args.putParcelable(ARGUMENT_USER, user);
+      MainFragment fragment = new MainFragment();
+      fragment.setArguments(args);
+      return fragment;
+}
+```
